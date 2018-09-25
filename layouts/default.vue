@@ -35,7 +35,9 @@ import { Client } from "nes";
 @Component({
   name: "layout",
   async mounted(this: Layout) {
-    const socket = await this.setupConnection("ws://localhost:4000");
+    const socket = await this.setupConnection(
+      `ws://${process.env.WS_HOST}:${process.env.WS_PORT}`
+    );
   }
 })
 export default class Layout extends Vue {

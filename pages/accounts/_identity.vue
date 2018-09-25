@@ -148,7 +148,9 @@ export default class extends Vue {
       return;
     }
     const { data } = await axios.get(
-      `http://localhost:4000/account/${this.identity}`
+      `http://${process.env.BACK_HOST}:${process.env.BACK_PORT}/account/${
+        this.identity
+      }`
     );
 
     return data.data;
@@ -161,7 +163,7 @@ export default class extends Vue {
     }
     this.loading = true;
     const { data } = await axios.get(
-      `http://localhost:4000/events?` +
+      `http://${process.env.BACK_HOST}:${process.env.BACK_PORT}/events?` +
         `limit=${this.show}&` +
         `offset=${this.offset}&` +
         `involved=${this.identity}`

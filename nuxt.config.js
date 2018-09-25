@@ -8,6 +8,11 @@ const argv = parseArgs(process.argv.slice(2), {
   unknown: parameter => false
 });
 
+process.env.WS_HOST = process.env.WS_HOST || "localhost";
+process.env.WS_PORT = process.env.WS_PORT || "4000";
+process.env.BACK_HOST = process.env.BACK_HOST || "localhost";
+process.env.BACK_PORT = process.env.BACK_PORT || "4000";
+
 const port =
   argv.port ||
   process.env.PORT ||
@@ -68,7 +73,7 @@ module.exports = {
   */
   css: ["~/assets/scss/main.scss"],
   build: {},
-  modules: ["@nuxtjs/axios", "~/modules/typescript.js"],
+  modules: ["@nuxtjs/axios", "~/modules/typescript.js", "@nuxtjs/dotenv"],
   axios: {},
 
   ...routerBase

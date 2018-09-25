@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@nuxtjs/axios": "^5.0.0",
+    "@nuxtjs/dotenv": "^1.1.1",
     "@types/deep-equal": "^1.0.1",
     "@types/lodash": "^4.14.116",
     "buefy": "^0.6.7",
