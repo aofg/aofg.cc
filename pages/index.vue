@@ -38,15 +38,12 @@ import { Client } from "nes";
 
 import HexAsColors from "~/components/HexAsColors.vue";
 import TokenValue from "~/components/TokenValue.vue";
-// import Transactions from "~/components/containers/Transactions.vue";
-// import Contracts from "~/components/containers/Contracts.vue";
 import smoothReflow from "vue-smooth-reflow";
-import { Block, Transaction, Account } from "~/lib/models";
 import Async from "~/plugins/async-computed.plugin";
 import axios from "axios";
 import { distanceInWordsToNow, format } from "date-fns";
 
-export interface EventModel {
+interface EventModel {
   id: string;
   timestamp: number;
   event: string;

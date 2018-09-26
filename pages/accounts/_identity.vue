@@ -69,7 +69,7 @@ import Async from "~/plugins/async-computed.plugin";
 import axios from "axios";
 import { distanceInWordsToNow, format } from "date-fns";
 
-export interface EventModel {
+interface EventModel {
   id: string;
   timestamp: number;
   event: string;

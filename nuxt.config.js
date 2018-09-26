@@ -37,7 +37,6 @@ module.exports = {
   //   baseUrl: process.env.BASE_URL || `http://${host}:${port}`
   // },
   plugins: [
-    { src: "~/plugins/buefy.plugin.ts" },
     { src: "~/plugins/bem.plugin.ts" },
     { src: "~/plugins/async-computed.plugin.ts" },
     { src: "~/plugins/smooth-reflow.plugin.ts", ssr: false }
@@ -72,7 +71,15 @@ module.exports = {
   ** Build configuration
   */
   css: ["~/assets/scss/main.scss"],
-  build: {},
+  build: {
+    extend: function(config) {
+      const babelLoader = config.module.rules.find(
+        rule => rule.loader === "babel-loader"
+      );
+      babelLoader.exclude = /node_modules\/(?![get-urls])/;
+    },
+    vendors: ["date-fns", "eosjs", "nes", "deep-equal"]
+  },
   modules: ["@nuxtjs/axios", "~/modules/typescript.js", "@nuxtjs/dotenv"],
   axios: {},
 

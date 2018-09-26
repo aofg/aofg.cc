@@ -66,6 +66,11 @@ $link: $primary;
 $link-invert: $primary-invert;
 $link-focus-border: $primary;
 
+@import "~bulma";
+@import "~buefy/src/scss/buefy";
+
+$columnGap: 0.75rem;
+
 .th-wrap {
   letter-spacing: 2px;
   font-weight: normal;
@@ -90,9 +95,6 @@ h6 {
   border-color: $primary;
   color: #fff;
 }
-
-@import "~bulma";
-@import "~buefy/src/scss/buefy";
 
 * {
   border-radius: 0 !important;
