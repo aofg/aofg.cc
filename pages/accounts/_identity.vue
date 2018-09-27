@@ -1,18 +1,50 @@
 <template lang="pug">
     div(:class="b()")
       div.container(:class="b('wrapper-disabled')")
+        //- nuxt-link.button.is-light(to='/' :class="b('back')")
+          span.icon.is-small
+            i.mdi.mdi-arrow-left
         div(:class="b('header')")
-          h2.is-size-4 Recent transfers
-          div(style="float: right")
-            //- el-switch(v-model='skipEmpty')
-        b-table(v-if='transfers && Array.isArray(transfers.events)' :data='transfers.events' @details-open="onDetails" :columns="columns" :loading='loading')
+          h2.is-size-4 
+            span Holder 
+            span.button.is-light
+              hex-as-color(:hex="identity")
+        div(:class="b('header')")
+          .tile(v-if='account')
+            .tile.is-child
+              div
+                h3.is-size-5 address
+                span(style="font-style: monospace; font-size: 80%") {{account.address}}
+            .tile.is-child
+              div
+                h3.is-size-5 Transactions
+                span {{account.txCount}}
+            .tile.is-child.is-hidden-touch
+              div 
+                h3.is-size-5 Incomings
+                token-value(:value='account.incomingSum')
+            .tile.is-child.is-hidden-touch
+              div
+                h3.is-size-5 Outgoins
+                token-value(:value='account.outgoingSum')
+            .tile.is-child
+              div
+                h3.is-size-5 Balance
+                token-value(:value='account.balance')
+        b-table(v-if='transfers' :data='transfers.events' :columns="columns" :loading='loading')
           template(slot-scope="scope")
             b-table-column(field="Sender")
-              nuxt-link.button.is-small.is-light(:to='`/accounts/${scope.row.returnValues._from}`')
+              nuxt-link.button.is-small.is-light(v-if='scope.row.returnValues._from !== identity' :to='`/accounts/${scope.row.returnValues._from}`')
                 hex-as-color(:hex="scope.row.returnValues._from")
+              div(v-else)
+                b-tag(type="success") self
+                //- hex-as-color(:hex="scope.row.returnValues._from")
             b-table-column(field="Recipient")
-              nuxt-link.button.is-small.is-light(:to='`/accounts/${scope.row.returnValues._to}`')
+              nuxt-link.button.is-small.is-light(v-if='scope.row.returnValues._to !== identity' :to='`/accounts/${scope.row.returnValues._to}`')
                 hex-as-color(:hex="scope.row.returnValues._to")
+              div(v-else)
+                b-tag(type="success") self
+                //- hex-as-color(:hex="scope.row.returnValues._to")
             b-table-column(field="Amount")
               token-value(:value='scope.row.returnValues._value')
             b-table-column(field="Transaction")
@@ -22,19 +54,15 @@
               b-tooltip(placement="is-top" type='is-light' :label="scope.row.timestamp | toJSTimestamp | dateShort")
                 span(:class="b('date')") {{ scope.row.timestamp | toJSTimestamp | fromNow }}
 
-        
-        b-pagination(:class="b('pagination')" v-if='transfers'
+        b-pagination(:class="b('pagination')" v-if='transfers && transfers.total > show'
                      :total='transfers.total'
                      :current.sync='page'
                      :per-page='show')
-                      
 </template>
 
 
 <script lang="ts">
-import { Component, Vue, Watch } from "nuxt-property-decorator";
-import { State } from "vuex-class";
-
+import { Component, Vue, Prop } from "nuxt-property-decorator";
 import HexAsColors from "~/components/HexAsColors.vue";
 import TokenValue from "~/components/TokenValue.vue";
 import Async from "~/plugins/async-computed.plugin";
@@ -61,6 +89,9 @@ interface EventModel {
     "hex-as-color": HexAsColors,
     "token-value": TokenValue
   },
+  mounted() {
+    this.identity = this.$route.params.identity;
+  },
   filters: {
     toJSTimestamp(unix: number) {
       return new Date(unix * 1000);
@@ -73,14 +104,11 @@ interface EventModel {
         addSuffix: true,
         includeSeconds: true
       });
-    },
-    toValue(bn: string) {
-      const s1 = bn.padStart(19, "0");
-      return s1.slice(0, -18) + "." + s1.slice(-18, -14);
     }
   }
 })
 export default class extends Vue {
+  identity: string = "";
   page: number = 1;
   show: number = 15;
 
@@ -107,18 +135,38 @@ export default class extends Vue {
     }
   ];
 
-  loading: boolean = true;
+  get offset(): number {
+    return (this.page - 1) * this.show;
+  }
 
   @Async(async function() {
-    this.loading = true;
-    console.log('load recent', `http://${process.env.BACK_HOST}:${process.env.BACK_PORT}`);
+    if (!this.identity) {
+      return;
+    }
     const { data } = await axios.get(
-      `http://${process.env.BACK_HOST}:${process.env.BACK_PORT}/events?limit=${
-        this.show
-      }&offset=${this.offset}`
+      `http://${process.env.BACK_HOST}:${process.env.BACK_PORT}/account/${
+        this.identity
+      }`
+    );
+
+    return data.data;
+  })
+  account: any;
+
+  @Async(async function() {
+    if (!this.identity) {
+      return;
+    }
+    this.loading = true;
+    const { data } = await axios.get(
+      `http://${process.env.BACK_HOST}:${process.env.BACK_PORT}/events?` +
+        `limit=${this.show}&` +
+        `offset=${this.offset}&` +
+        `involved=${this.identity}`
     );
 
     await new Promise(resolve => setTimeout(resolve, 350));
+    console.log(data.data);
     this.loading = false;
     return data.data;
   })
@@ -127,11 +175,14 @@ export default class extends Vue {
     events: EventModel[];
   } | null = null;
   defaultOpen: string[] = [];
-
-  get offset(): number {
-    return (this.page - 1) * this.show;
-  }
-
-  onDetails(row, index) {}
 }
 </script>
+
+
+<style lang="scss">
+.page__header {
+  .tile.is-child {
+    flex-basis: auto;
+  }
+}
+</style>

@@ -4,18 +4,26 @@
   "private": true,
   "dependencies": {
     "@nuxtjs/axios": "^5.0.0",
+    "@nuxtjs/dotenv": "^1.1.1",
+    "bulma": "^0.7.1",
+    "date-fns": "^1.29.0",
     "nuxt": "^1.3.0",
+    "nuxt-buefy": "^0.2.3",
     "nuxt-property-decorator": "^1.2.0",
+    "vue-async-computed": "^3.4.1",
     "vuex-class": "^0.3.0"
   },
   "scripts": {
     "dev": "nuxt",
     "build": "nuxt build",
-    "start": "nuxt start",
+    "start": "BACK_HOST=localhost BACK_PORT=4000 nuxt start",
     "generate": "nuxt generate"
   },
   "devDependencies": {
     "@types/node": "^9.4.6",
+    "node-sass": "^4.9.3",
+    "pug": "^2.0.3",
+    "sass-loader": "^7.1.0",
     "ts-loader": "^3.5.0",
     "typescript": "^2.7.2"
   }

@@ -1,4 +1,4 @@
-const parseArgs = require("minimist")
+const parseArgs = require("minimist");
 const argv = parseArgs(process.argv.slice(2), {
   alias: {
     H: "hostname",
@@ -6,32 +6,36 @@ const argv = parseArgs(process.argv.slice(2), {
   },
   string: ["H"],
   unknown: parameter => false
-})
+});
 
 const port =
   argv.port ||
   process.env.PORT ||
   process.env.npm_package_config_nuxt_port ||
-  "3000"
+  "3000";
 const host =
   argv.hostname ||
   process.env.HOST ||
   process.env.npm_package_config_nuxt_host ||
-  "localhost"
+  "localhost";
+
+console.log(`http://${process.env.BACK_HOST}:${process.env.BACK_PORT}`);
+
 module.exports = {
   env: {
-    baseUrl:
-      process.env.BASE_URL ||
-      `http://${host}:${port}`
+    baseUrl: process.env.BASE_URL || `http://${host}:${port}`
   },
+  plugins: [
+    { src: "~/plugins/bem.plugin.ts" },
+    { src: "~/plugins/async-computed.plugin.ts" }
+  ],
   head: {
     title: "tt1",
     meta: [
       { charset: "utf-8" },
       {
         name: "viewport",
-        content:
-          "width=device-width, initial-scale=1"
+        content: "width=device-width, initial-scale=1"
       },
       {
         hid: "description",
@@ -54,11 +58,13 @@ module.exports = {
   /*
   ** Build configuration
   */
-  css: ["~/assets/css/main.css"],
+  css: ["~/assets/scss/main.scss"],
   build: {},
   modules: [
     "@nuxtjs/axios",
+    "nuxt-buefy",
+    "@nuxtjs/dotenv",
     "~/modules/typescript.js"
   ],
   axios: {}
-}
+};

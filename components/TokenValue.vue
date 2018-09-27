@@ -56,7 +56,7 @@ export default class extends Vue {
   delimited: string;
 
   get normalized() {
-    return this.value.padStart(19, "0");
+    return (this.value || "0").padStart(19, "0");
   }
   get fullDecimals() {
     return this.normalized.slice(-18);
