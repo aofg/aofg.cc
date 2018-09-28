@@ -15,7 +15,7 @@
 <script lang="ts">
 import axios from "axios";
 import { Component, Vue } from "nuxt-property-decorator";
-import Async from "~/plugins/async-computed.plugin";
+import { Async } from "~/plugins/async-computed.plugin";
 import HexAsColors from "~/components/HexAsColors.vue";
 import TokenValue from "~/components/TokenValue.vue";
 

@@ -19,13 +19,13 @@ const host =
   process.env.npm_package_config_nuxt_host ||
   "localhost";
 
-console.log(`http://${process.env.BACK_HOST}:${process.env.BACK_PORT}`);
-
 module.exports = {
   env: {
-    baseUrl: process.env.BASE_URL || `http://${host}:${port}`
+    baseUrl: process.env.BASE_URL || `http://${host}:${port}`,
+    ...process.env
   },
   plugins: [
+    { src: "~/plugins/charts.plugin.ts", ssr: false },
     { src: "~/plugins/bem.plugin.ts" },
     { src: "~/plugins/async-computed.plugin.ts" }
   ],
@@ -59,7 +59,11 @@ module.exports = {
   ** Build configuration
   */
   css: ["~/assets/scss/main.scss"],
-  build: {},
+  build: {
+    babel: {
+      plugins: ["dynamic-import-node"]
+    }
+  },
   modules: [
     "@nuxtjs/axios",
     "nuxt-buefy",

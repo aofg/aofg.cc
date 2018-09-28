@@ -65,7 +65,7 @@
 import { Component, Vue, Prop } from "nuxt-property-decorator";
 import HexAsColors from "~/components/HexAsColors.vue";
 import TokenValue from "~/components/TokenValue.vue";
-import Async from "~/plugins/async-computed.plugin";
+import { Async } from "~/plugins/async-computed.plugin";
 import axios from "axios";
 import { distanceInWordsToNow, format } from "date-fns";
 

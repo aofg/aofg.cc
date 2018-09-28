@@ -22,9 +22,7 @@ Vue.use(AsyncComputed);
  * @param  options the options for the prop
  * @return PropertyDecorator | void
  */
-export default function Async(
-  options?: AsyncComputedOptions
-): PropertyDecorator {
+export function Async(options?: AsyncComputedOptions): PropertyDecorator {
   return function(target: Vue, key: string) {
     let opts = {} as IAsyncComputedDecoratorOptions;
     if (typeof options === "function") {
@@ -45,4 +43,9 @@ export default function Async(
         ((componentOptions.asyncComputed = {}) as any))[k] = opts;
     })(target, key);
   };
+}
+
+interface AsyncDataOptions {}
+export function AsyncData(options?: AsyncDataOptions): PropertyDecorator {
+  return function(target: Vue, key: string) {};
 }

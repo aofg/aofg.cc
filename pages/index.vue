@@ -37,7 +37,7 @@ import { State } from "vuex-class";
 
 import HexAsColors from "~/components/HexAsColors.vue";
 import TokenValue from "~/components/TokenValue.vue";
-import Async from "~/plugins/async-computed.plugin";
+import { Async } from "~/plugins/async-computed.plugin";
 import axios from "axios";
 import { distanceInWordsToNow, format } from "date-fns";
 
@@ -111,7 +111,10 @@ export default class extends Vue {
 
   @Async(async function() {
     this.loading = true;
-    console.log('load recent', `http://${process.env.BACK_HOST}:${process.env.BACK_PORT}`);
+    console.log(
+      "load recent",
+      `http://${process.env.BACK_HOST}:${process.env.BACK_PORT}`
+    );
     const { data } = await axios.get(
       `http://${process.env.BACK_HOST}:${process.env.BACK_PORT}/events?limit=${
         this.show
