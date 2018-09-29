@@ -24,9 +24,13 @@ module.exports = {
     baseUrl: process.env.BASE_URL || `http://${host}:${port}`,
     ...process.env
   },
+  router: {
+    middleware: "i18n"
+  },
   plugins: [
     { src: "~/plugins/charts.plugin.ts", ssr: false },
     { src: "~/plugins/bem.plugin.ts" },
+    { src: "~/plugins/i18n.plugin.ts" },
     { src: "~/plugins/async-computed.plugin.ts" }
   ],
   head: {

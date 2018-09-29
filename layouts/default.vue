@@ -13,8 +13,8 @@
         nuxt-link.button.is-white(to='/') Recent transactions
         nuxt-link.button.is-white(to='/top') Top holders
         nuxt-link.button.is-white(to='/coin') Coin summary
-    //- el-menu.el-menu-demo(:class='b("menu")' mode="horizontal" :router="true")
-      el-menu-item(index='deploy' :route="{ path: '/' }") Overview
+                
+        language-select
 
     nuxt(:class="b('content')")
 
@@ -29,14 +29,16 @@
 
 <script lang="ts">
 import { Component, Vue } from "nuxt-property-decorator";
+import LanguageSelect from "~/components/LanguageSelect.vue";
 
 @Component({
   name: "layout",
-  async mounted(this: Layout) {
-  }
+  components: {
+    "language-select": LanguageSelect
+  },
+  async mounted(this: Layout) {}
 })
-export default class Layout extends Vue {
-}
+export default class Layout extends Vue {}
 </script>
 
 
