@@ -1,0 +1,22 @@
+{
+  "recent-transactions": "Последние транзакции",
+  "top-holders": "Топ держателей",
+  "coin-summary": "О монете",
+  "copyright-group": "ГРУППА КОМПАНИЙ",
+  "copyright-name": "«АВТОМАЙН ХОЛДИНГ»",
+  "copyright-notice": "© all rights reserved maincoin.money.com",
+
+  "sender": "Отправитель",
+  "recipient": "Получатель",
+  "amount": "Количество",
+  "hash": "Hash",
+  "age": "Возраст",
+
+  "address": "Адресс",
+  "balance": "Баланс",
+
+  "holder": "Держатель",
+  "incomings": "Дебет",
+  "outgoings": "Кредет",
+  "transactions": "Транзакции"
+}

@@ -1,12 +1,12 @@
 <template lang="pug">
   div.container(:class="b()")
     div(:class="b('header')")
-      h2.is-size-4 Top holders
+      h2.is-size-4 {{ $t('top-holders') }}
     
-    b-table(v-if='loaded && Array.isArray(loaded.accounts)' :data='loaded.accounts' :columns="loaded.columns" :loading='loaded.loading')
+    b-table(v-if='loaded && Array.isArray(loaded.accounts)' :data='loaded.accounts' :columns="columns" :loading='loaded.loading')
       template(slot-scope="scope")
         b-table-column(field="Sender")
-          nuxt-link.button.is-small.is-light(:to='`/accounts/${scope.row.address}`')
+          nuxt-link.button.is-small.is-light(:to='`/${locale}/accounts/${scope.row.address}`')
             hex-as-color(:hex="scope.row.address")
         b-table-column(field="Amount")
           token-value(:value='scope.row.balance')
@@ -14,6 +14,7 @@
 
 <script lang="ts">
 import axios from "axios";
+import { State } from "vuex-class";
 import { Component, Vue } from "nuxt-property-decorator";
 import { Async } from "~/plugins/async-computed.plugin";
 import HexAsColors from "~/components/HexAsColors.vue";
@@ -27,6 +28,7 @@ import TokenValue from "~/components/TokenValue.vue";
   }
 })
 export default class extends Vue {
+  @State locale;
   show: number = 15;
   page: number = 1;
   @Async(async function() {
@@ -49,15 +51,17 @@ export default class extends Vue {
   })
   tmpLoaded: any;
 
-  loaded: any = {
-    columns: [
+  get columns() {
+    return [
       {
-        label: "Address"
+        label: this.$t("address")
       },
       {
-        label: "Balance"
+        label: this.$t("balance")
       }
-    ],
+    ];
+  }
+  loaded: any = {
     accounts: [],
     loading: true
   };

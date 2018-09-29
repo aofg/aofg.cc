@@ -3,10 +3,16 @@ export default function({ isHMR, app, store, route, params, error, redirect }) {
   // If middleware is called from hot module replacement, ignore it
   if (isHMR) return;
   // Get locale from params
-  if (!params.lang) {
+  const locales = Object.keys(app.i18n.messages);
+  const lang = params.lang || route.fullPath.split("/")[1];
+  console.log("lang", lang);
+  console.log("param", params.lang);
+  console.log("full", route.fullPath);
+  if (!lang || locales.indexOf(lang) === -1) {
     return redirect(`/${defaultLocale}${route.fullPath}`);
   } else {
-    store.commit("SET_LANG", params.lang);
+    store.commit("SET_LANG", lang);
+    app.i18n.locale = store.state.locale;
   }
   // const locale = params.lang || defaultLocale;
   // if (store.state.locales.indexOf(locale) === -1) {

@@ -2,26 +2,24 @@
     div(:class="b()")
       div.container(:class="b('wrapper-disabled')")
         div(:class="b('header')")
-          h2.is-size-4 Recent transfers
+          h2.is-size-4 {{ $t('recent-transactions') }}
           div(style="float: right")
             //- el-switch(v-model='skipEmpty')
         b-table(v-if='transfers && Array.isArray(transfers.events)' :data='transfers.events' @details-open="onDetails" :columns="columns" :loading='loading')
           template(slot-scope="scope")
             b-table-column(field="Sender")
-              nuxt-link.button.is-small.is-light(:to='`/accounts/${scope.row.returnValues._from}`')
+              nuxt-link.button.is-small.is-light(:to='`/${locale}/accounts/${scope.row.returnValues._from}`')
                 hex-as-color(:hex="scope.row.returnValues._from")
             b-table-column(field="Recipient")
-              nuxt-link.button.is-small.is-light(:to='`/accounts/${scope.row.returnValues._to}`')
+              nuxt-link.button.is-small.is-light(:to='`/${locale}/accounts/${scope.row.returnValues._to}`')
                 hex-as-color(:hex="scope.row.returnValues._to")
             b-table-column(field="Amount")
               token-value(:value='scope.row.returnValues._value')
             b-table-column(field="Transaction")
-              nuxt-link.button.is-small.is-light(:to='`/tx/${scope.row.transactionHash}`')
+              nuxt-link.button.is-small.is-light(:to='`/${locale}/tx/${scope.row.transactionHash}`')
                 hex-as-color(:hex="scope.row.transactionHash")
             b-table-column(field="Time")
-              b-tooltip(placement="is-top" type='is-light' :label="scope.row.timestamp | toJSTimestamp | dateShort")
-                span(:class="b('date')") {{ scope.row.timestamp | toJSTimestamp | fromNow }}
-
+              from-now(:time="scope.row.timestamp | toJSTimestamp")
         
         b-pagination(:class="b('pagination')" v-if='transfers'
                      :total='transfers.total'
@@ -36,6 +34,7 @@ import { Component, Vue, Watch } from "nuxt-property-decorator";
 import { State } from "vuex-class";
 
 import HexAsColors from "~/components/HexAsColors.vue";
+import FromNow from "~/components/FromNow.vue";
 import TokenValue from "~/components/TokenValue.vue";
 import { Async } from "~/plugins/async-computed.plugin";
 import axios from "axios";
@@ -59,53 +58,49 @@ interface EventModel {
   name: "page",
   components: {
     "hex-as-color": HexAsColors,
-    "token-value": TokenValue
+    "token-value": TokenValue,
+    "from-now": FromNow
   },
   filters: {
     toJSTimestamp(unix: number) {
       return new Date(unix * 1000);
-    },
-    dateShort(date: string | Date) {
-      return format(date, "D MMM, HH:mm");
-    },
-    fromNow(date: string | Date) {
-      return distanceInWordsToNow(date, {
-        addSuffix: true,
-        includeSeconds: true
-      });
-    },
-    toValue(bn: string) {
-      const s1 = bn.padStart(19, "0");
-      return s1.slice(0, -18) + "." + s1.slice(-18, -14);
     }
   }
 })
 export default class extends Vue {
+  @State locale: string;
+
   page: number = 1;
   show: number = 15;
 
-  columns = [
-    {
-      label: "Sender",
-      width: 150
-    },
-    {
-      label: "Recipient",
-      width: 150
-    },
-    {
-      label: "Amount",
-      width: 200
-    },
-    {
-      label: "Hash",
-      width: 150
-    },
-    {
-      label: "Age",
-      width: 120
+  get columns() {
+    // hook on locale changes :)
+    if (this.locale) {
+      return [
+        {
+          label: this.$t("sender"),
+          width: 150
+        },
+        {
+          label: this.$t("recipient"),
+          width: 150
+        },
+        {
+          label: this.$t("amount"),
+          width: 200
+        },
+        {
+          label: this.$t("hash"),
+          width: 150
+        },
+        {
+          label: this.$t("age"),
+          width: 120
+        }
+      ];
     }
-  ];
+    return [];
+  }
 
   loading: boolean = true;
 

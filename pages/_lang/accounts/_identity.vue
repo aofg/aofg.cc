@@ -6,41 +6,41 @@
             i.mdi.mdi-arrow-left
         div(:class="b('header')")
           h2.is-size-4 
-            span Holder 
+            span {{ $t('holder') }}
             span.button.is-light
               hex-as-color(:hex="identity")
         div(:class="b('header')")
           .tile(v-if='account')
             .tile.is-child
               div
-                h3.is-size-5 address
+                h3.is-size-5 {{ $t('address') }}
                 span(style="font-style: monospace; font-size: 80%") {{account.address}}
             .tile.is-child
               div
-                h3.is-size-5 Transactions
+                h3.is-size-5 {{ $t('transactions') }}
                 span {{account.txCount}}
             .tile.is-child.is-hidden-touch
               div 
-                h3.is-size-5 Incomings
+                h3.is-size-5 {{ $t('incomings') }}
                 token-value(:value='account.incomingSum')
             .tile.is-child.is-hidden-touch
               div
-                h3.is-size-5 Outgoins
+                h3.is-size-5 {{ $t('outgoings') }}
                 token-value(:value='account.outgoingSum')
             .tile.is-child
               div
-                h3.is-size-5 Balance
+                h3.is-size-5 {{ $t('balance') }}
                 token-value(:value='account.balance')
         b-table(v-if='transfers' :data='transfers.events' :columns="columns" :loading='loading')
           template(slot-scope="scope")
             b-table-column(field="Sender")
-              nuxt-link.button.is-small.is-light(v-if='scope.row.returnValues._from !== identity' :to='`/accounts/${scope.row.returnValues._from}`')
+              nuxt-link.button.is-small.is-light(v-if='scope.row.returnValues._from !== identity' :to="`/${locale}/accounts/${scope.row.returnValues._from}`")
                 hex-as-color(:hex="scope.row.returnValues._from")
               div(v-else)
                 b-tag(type="success") self
                 //- hex-as-color(:hex="scope.row.returnValues._from")
             b-table-column(field="Recipient")
-              nuxt-link.button.is-small.is-light(v-if='scope.row.returnValues._to !== identity' :to='`/accounts/${scope.row.returnValues._to}`')
+              nuxt-link.button.is-small.is-light(v-if='scope.row.returnValues._to !== identity' :to="`/${locale}/accounts/${scope.row.returnValues._to}`")
                 hex-as-color(:hex="scope.row.returnValues._to")
               div(v-else)
                 b-tag(type="success") self
@@ -48,11 +48,10 @@
             b-table-column(field="Amount")
               token-value(:value='scope.row.returnValues._value')
             b-table-column(field="Transaction")
-              nuxt-link.button.is-small.is-light(:to='`/tx/${scope.row.transactionHash}`')
+              nuxt-link.button.is-small.is-light(:to='`/${locale}/tx/${scope.row.transactionHash}`')
                 hex-as-color(:hex="scope.row.transactionHash")
             b-table-column(field="Time")
-              b-tooltip(placement="is-top" type='is-light' :label="scope.row.timestamp | toJSTimestamp | dateShort")
-                span(:class="b('date')") {{ scope.row.timestamp | toJSTimestamp | fromNow }}
+              from-now(:time="scope.row.timestamp | toJSTimestamp")
 
         b-pagination(:class="b('pagination')" v-if='transfers && transfers.total > show'
                      :total='transfers.total'
@@ -65,9 +64,11 @@
 import { Component, Vue, Prop } from "nuxt-property-decorator";
 import HexAsColors from "~/components/HexAsColors.vue";
 import TokenValue from "~/components/TokenValue.vue";
+import FromNow from "~/components/FromNow.vue";
 import { Async } from "~/plugins/async-computed.plugin";
 import axios from "axios";
 import { distanceInWordsToNow, format } from "date-fns";
+import { State } from "vuex-class";
 
 interface EventModel {
   id: string;
@@ -87,7 +88,8 @@ interface EventModel {
   name: "page",
   components: {
     "hex-as-color": HexAsColors,
-    "token-value": TokenValue
+    "token-value": TokenValue,
+    "from-now": FromNow
   },
   mounted() {
     this.identity = this.$route.params.identity;
@@ -95,45 +97,40 @@ interface EventModel {
   filters: {
     toJSTimestamp(unix: number) {
       return new Date(unix * 1000);
-    },
-    dateShort(date: string | Date) {
-      return format(date, "D MMM, HH:mm");
-    },
-    fromNow(date: string | Date) {
-      return distanceInWordsToNow(date, {
-        addSuffix: true,
-        includeSeconds: true
-      });
     }
   }
 })
 export default class extends Vue {
+  @State locale;
+
   identity: string = "";
   page: number = 1;
   show: number = 15;
 
-  columns = [
-    {
-      label: "Sender",
-      width: 150
-    },
-    {
-      label: "Recipient",
-      width: 150
-    },
-    {
-      label: "Amount",
-      width: 200
-    },
-    {
-      label: "Hash",
-      width: 150
-    },
-    {
-      label: "Age",
-      width: 120
-    }
-  ];
+  get columns() {
+    return [
+      {
+        label: this.$t("sender"),
+        width: 150
+      },
+      {
+        label: this.$t("recipient"),
+        width: 150
+      },
+      {
+        label: this.$t("amount"),
+        width: 200
+      },
+      {
+        label: this.$t("hash"),
+        width: 150
+      },
+      {
+        label: this.$t("age"),
+        width: 120
+      }
+    ];
+  }
 
   get offset(): number {
     return (this.page - 1) * this.show;
