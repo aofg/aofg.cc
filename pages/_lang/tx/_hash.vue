@@ -55,7 +55,7 @@ export default class extends Vue {
       return;
     }
     const { data } = await axios.get(
-      `http://${process.env.BACK_HOST}:${process.env.BACK_PORT}/tx/${this.hash}`
+      `${process.env.BACKEND_URL}/tx/${this.hash}`
     );
 
     return data.data;

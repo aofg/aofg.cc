@@ -122,7 +122,7 @@ export default class extends Vue {
 
   async fetchInfo() {
     const { data } = await (<AxiosInstance>(<any>this).$axios).get(
-      `http://${process.env.BACK_HOST}:${process.env.BACK_PORT}/info`
+      `${process.env.BACKEND_URL}/info`
     );
 
     console.log(data);

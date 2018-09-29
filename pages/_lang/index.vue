@@ -108,10 +108,10 @@ export default class extends Vue {
     this.loading = true;
     console.log(
       "load recent",
-      `http://${process.env.BACK_HOST}:${process.env.BACK_PORT}`
+      `${process.env.BACKEND_URL}`
     );
     const { data } = await axios.get(
-      `http://${process.env.BACK_HOST}:${process.env.BACK_PORT}/events?limit=${
+      `${process.env.BACKEND_URL}/events?limit=${
         this.show
       }&offset=${this.offset}`
     );

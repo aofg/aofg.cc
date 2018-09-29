@@ -141,9 +141,7 @@ export default class extends Vue {
       return;
     }
     const { data } = await axios.get(
-      `http://${process.env.BACK_HOST}:${process.env.BACK_PORT}/account/${
-        this.identity
-      }`
+      `${process.env.BACKEND_URL}/account/${this.identity}`
     );
 
     return data.data;
@@ -156,7 +154,7 @@ export default class extends Vue {
     }
     this.loading = true;
     const { data } = await axios.get(
-      `http://${process.env.BACK_HOST}:${process.env.BACK_PORT}/events?` +
+      `${process.env.BACKEND_URL}/events?` +
         `limit=${this.show}&` +
         `offset=${this.offset}&` +
         `involved=${this.identity}`

@@ -34,9 +34,7 @@ export default class extends Vue {
   @Async(async function() {
     // this.loaded.loading = true;
     const { data } = await axios.get(
-      `http://${process.env.BACK_HOST}:${process.env.BACK_PORT}/top?limit=${
-        this.show
-      }&offset=${this.offset}`
+      `${process.env.BACKEND_URL}/top?limit=${this.show}&offset=${this.offset}`
     );
 
     await new Promise(resolve => setTimeout(resolve, 350));
