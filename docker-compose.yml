@@ -1,0 +1,98 @@
+version: "3"
+services:
+  rethinkdb:
+    image: "rethinkdb"
+    expose:
+      - 28015
+      - 8080
+    ports:
+      - 28015:28015
+      - 8080:8080
+  setup:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    image: maincoin/services:1
+    command: ["yarn", "build"]
+  exporter:
+    restart: always
+    image: maincoin/services:1
+    depends_on:
+      - setup
+      - rethinkdb
+    environment:
+      RETHINK_HOST: rethinkdb
+      RETHINK_PORT: 28015
+      RETHINK_DB: maincoin
+    command: ["node", ".", "--", "exporter"]
+  balances:
+    restart: always
+    image: maincoin/services:1
+    depends_on:
+      - setup
+      - rethinkdb
+    environment:
+      RETHINK_HOST: rethinkdb
+      RETHINK_PORT: 28015
+      RETHINK_DB: maincoin
+    command: ["node", ".", "--", "balances"]
+  parser:
+    restart: always
+    image: maincoin/services:1
+    depends_on:
+      - setup
+      - rethinkdb
+    environment:
+      RETHINK_HOST: rethinkdb
+      RETHINK_PORT: 28015
+      RETHINK_DB: maincoin
+    command: ["node", ".", "--", "parser"]
+  timestamper:
+    restart: always
+    image: maincoin/services:1
+    depends_on:
+      - setup
+      - rethinkdb
+    environment:
+      RETHINK_HOST: rethinkdb
+      RETHINK_PORT: 28015
+      RETHINK_DB: maincoin
+    command: ["node", ".", "--", "timestamper"]
+  api:
+    restart: always
+    image: maincoin/services:1
+    expose:
+      - 4000
+    ports:
+      - "80:4000"
+    depends_on:
+      - setup
+      - rethinkdb
+    environment:
+      RETHINK_HOST: rethinkdb
+      RETHINK_PORT: 28015
+      RETHINK_DB: maincoin
+    command: ["node", "."]
+
+  frontend-setup:
+    build:
+      context: ./frontend-remake
+      dockerfile: Dockerfile
+    image: maincoin/frontend:1
+    command: ["yarn", "build"]
+
+  frontend:
+    restart: always
+    image: maincoin/frontend:1
+    depends_on:
+      - api
+    expose:
+      - 3000
+    ports:
+      - 80:3000
+    environment:
+      WS_HOST: api
+      WS_PORT: 4000
+      BACK_HOST: api
+      BACK_POTR: 4000
+    command: ["yarn", "start"]
