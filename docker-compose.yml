@@ -12,32 +12,51 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    expose:
-      - 4000
-    ports:
-      - "80:4000"
     depends_on:
       - rethinkdb
     environment:
       RETHINK_HOST: rethinkdb
       RETHINK_PORT: 28015
       RETHINK_DB: maincoin
+    labels:
+      traefik.enable: true
+      traefik.frontend.rule: "Host: api.maincoin.money"
+      traefik.port: 4000
     command: ["node", "."]
 
   frontend:
     build:
-      context: ./frontend-remake
+      context: ./frontend
       dockerfile: Dockerfile
     image: maincoin/frontend:1
     depends_on:
       - backend
-    expose:
-      - 3000
-    ports:
-      - 80:3000
     environment:
       WS_HOST: http://46.4.95.174
       WS_PORT: 4000
       BACK_HOST: http://46.4.95.174
       BACK_POTR: 4000
+    labels:
+      traefik.enable: true
+      traefik.frontend.rule: "Host: explorer.maincoin.money"
+      traefik.port: 3000
     command: ["yarn", "start"]
+
+  proxy:
+    image: traefik
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ../config/traefik.toml:/etc/traefik/traefik.toml:ro
+      - ../config/acme.json:/acme.json
+    networks:
+      default:
+        aliases:
+          - explorer.maincoin.money
+          - api.maincoin.money
+    labels:
+      traefik.enable: true
+      traefik.frontend.rule: "Host: monitor.wb.local"
+      traefik.port: 8080
