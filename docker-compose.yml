@@ -17,7 +17,6 @@ services:
     ports:
       - "80:4000"
     depends_on:
-      - setup
       - rethinkdb
     environment:
       RETHINK_HOST: rethinkdb
