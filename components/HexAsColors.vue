@@ -1,5 +1,5 @@
 <template lang="pug">
-  div(:class='b()')
+  span(:class='b()')
     b-tooltip(placement="is-top" type='is-light' :label="hex")
       span(:class="b('wrapper')")
         span(:class='b("head")' v-if='head') {{ extractedHead }}
@@ -28,7 +28,11 @@ export default class extends Vue {
   }
 
   get extractedTail() {
-    return this.normalized.slice(-this.tail);
+    if (this.tail > 0) {
+      return this.normalized.slice(-this.tail);
+    } else {
+      return "";
+    }
   }
 
   get normalized() {
@@ -36,8 +40,11 @@ export default class extends Vue {
   }
 
   get parts() {
-    const parts = this.normalized.slice(this.head, -this.tail).match(/.{6}/g);
-    return parts;
+    if (this.tail > 0) {
+      return this.normalized.slice(this.head, -this.tail).match(/.{6}/g);
+    } else {
+      return this.normalized.slice(this.head).match(/.{6}/g);
+    }
   }
 }
 </script>

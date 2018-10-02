@@ -3,26 +3,28 @@
     span(:class='b("round")') {{ round }}
     span(:class='b("dot")') {{ dot }}
     span(:class='b("decimals")') {{ shownDecimals }}
-    span(:class="b('ticker')") {{ tiker }}
+    span(:class="b('ticker')") {{ ticker }}
 </template>
 
 <style lang="scss">
 .token-value {
   // text-align: right;
-  display: flex;
+  // display: flex;
   font-variant-numeric: tabular-nums;
 
   &__round {
-    // flex-grow: 1;
+    letter-spacing: -0.04em;
   }
 
   &__decimals {
+    letter-spacing: -0.07em;
     font-size: 80%;
     opacity: 0.6;
   }
 
   &__ticker {
     width: 60px;
+    letter-spacing: -0.07em;
     text-align: left;
     margin-left: 0.45em;
   }
@@ -41,7 +43,7 @@ export default class extends Vue {
   value: string;
 
   @Prop({ default: "MNC" })
-  tiker: string;
+  ticker: string;
 
   @Prop({ default: 18 })
   decimals: number;

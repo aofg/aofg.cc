@@ -34,7 +34,7 @@ module.exports = {
     { src: "~/plugins/async-computed.plugin.ts" }
   ],
   head: {
-    title: "tt1",
+    title: "MAINCOIN EXPLORER",
     meta: [
       { charset: "utf-8" },
       {
@@ -45,13 +45,39 @@ module.exports = {
         hid: "description",
         name: "description",
         content: "Nuxt.js project"
+      },
+      {
+        name: "msapplication-TileColor",
+        content: "#ffffff"
+      },
+      {
+        name: "theme-color",
+        content: "#ffffff"
       }
     ],
     link: [
       {
         rel: "icon",
-        type: "image/x-icon",
-        href: "/favicon.ico"
+        type: "image/png",
+        sizes: "32x32",
+        href: "/favicon-32x32.png"
+      },
+      {
+        rel: "icon",
+        type: "image/png",
+        sizes: "16x16",
+        href: "/favicon-16x16.png"
+      },
+      {
+        rel: "apple-touch-icon",
+        type: "image/png",
+        sizes: "180x180",
+        href: "/apple-touch-icon.png"
+      },
+      {
+        rel: "mask-icon",
+        href: "/safari-pinned-tab.svg",
+        color: "#bf944a"
       }
     ]
   },

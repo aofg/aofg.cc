@@ -2,7 +2,7 @@
   div(:class="b()")
     div.container(:class="b('wrapper-disabled')")
       div(:class="b('header')")
-        h2.is-size-4 
+        h2.is-size-2
           strong Maincoin 
           span &ndash; это цифровая наличность, доступная для вас в любой точке мира
 

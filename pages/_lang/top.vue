@@ -1,7 +1,7 @@
 <template lang="pug">
   div.container(:class="b()")
     div(:class="b('header')")
-      h2.is-size-4 {{ $t('top-holders') }}
+      h2.is-size-2 {{ $t('top-holders') }}
     
     b-table(v-if='loaded && Array.isArray(loaded.accounts)' :data='loaded.accounts' :columns="columns" :loading='loaded.loading')
       template(slot-scope="scope")

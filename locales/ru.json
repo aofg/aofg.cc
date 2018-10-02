@@ -4,7 +4,7 @@
   "coin-summary": "О монете",
   "copyright-group": "ГРУППА КОМПАНИЙ",
   "copyright-name": "«АВТОМАЙН ХОЛДИНГ»",
-  "copyright-notice": "© all rights reserved maincoin.money.com",
+  "copyright-notice": "© all rights reserved maincoin.money",
 
   "sender": "Отправитель",
   "recipient": "Получатель",
@@ -18,5 +18,13 @@
   "holder": "Держатель",
   "incomings": "Дебет",
   "outgoings": "Кредет",
-  "transactions": "Транзакции"
+  "transactions": "Транзакции",
+  "transaction": "Транзакция",
+
+  "specification": "Спецификация",
+
+  "time": "Время",
+  "status": "Статус",
+  "fee": "Комиссия",
+  "signature": "Подпись"
 }

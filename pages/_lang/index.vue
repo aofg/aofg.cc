@@ -2,22 +2,22 @@
     div(:class="b()")
       div.container(:class="b('wrapper-disabled')")
         div(:class="b('header')")
-          h2.is-size-4 {{ $t('recent-transactions') }}
+          h2.is-size-2 {{ $t('recent-transactions') }}
           div(style="float: right")
             //- el-switch(v-model='skipEmpty')
         b-table(v-if='transfers && Array.isArray(transfers.events)' :data='transfers.events' @details-open="onDetails" :columns="columns" :loading='loading')
           template(slot-scope="scope")
             b-table-column(field="Sender")
-              nuxt-link.button.is-small.is-light(:to='`/${locale}/accounts/${scope.row.returnValues._from}`')
-                hex-as-color(:hex="scope.row.returnValues._from")
+              nuxt-link.button.is-small.is-light(:to='`/${locale}/accounts/${scope.row.from}`')
+                hex-as-color(:hex="scope.row.from")
             b-table-column(field="Recipient")
-              nuxt-link.button.is-small.is-light(:to='`/${locale}/accounts/${scope.row.returnValues._to}`')
-                hex-as-color(:hex="scope.row.returnValues._to")
+              nuxt-link.button.is-small.is-light(:to='`/${locale}/accounts/${scope.row.to}`')
+                hex-as-color(:hex="scope.row.to")
             b-table-column(field="Amount")
-              token-value(:value='scope.row.returnValues._value')
+              token-value(:value='scope.row.value')
             b-table-column(field="Transaction")
-              nuxt-link.button.is-small.is-light(:to='`/${locale}/tx/${scope.row.transactionHash}`')
-                hex-as-color(:hex="scope.row.transactionHash")
+              nuxt-link.button.is-small.is-light(:to='`/${locale}/tx/${scope.row.tx}`')
+                hex-as-color(:hex="scope.row.tx")
             b-table-column(field="Time")
               from-now(:time="scope.row.timestamp | toJSTimestamp")
         
@@ -106,14 +106,11 @@ export default class extends Vue {
 
   @Async(async function() {
     this.loading = true;
-    console.log(
-      "load recent",
-      `${process.env.BACKEND_URL}`
-    );
+    console.log("load recent", `${process.env.BACKEND_URL}`);
     const { data } = await axios.get(
-      `${process.env.BACKEND_URL}/events?limit=${
-        this.show
-      }&offset=${this.offset}`
+      `${process.env.BACKEND_URL}/events?limit=${this.show}&offset=${
+        this.offset
+      }`
     );
 
     await new Promise(resolve => setTimeout(resolve, 350));

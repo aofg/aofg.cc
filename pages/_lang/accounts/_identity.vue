@@ -5,9 +5,9 @@
           span.icon.is-small
             i.mdi.mdi-arrow-left
         div(:class="b('header')")
-          h2.is-size-4 
+          h2.is-size-2
             span {{ $t('holder') }}
-            span.button.is-light
+            span.button.is-light.is-large
               hex-as-color(:hex="identity")
         div(:class="b('header')")
           .tile(v-if='account')
@@ -34,22 +34,22 @@
         b-table(v-if='transfers' :data='transfers.events' :columns="columns" :loading='loading')
           template(slot-scope="scope")
             b-table-column(field="Sender")
-              nuxt-link.button.is-small.is-light(v-if='scope.row.returnValues._from !== identity' :to="`/${locale}/accounts/${scope.row.returnValues._from}`")
-                hex-as-color(:hex="scope.row.returnValues._from")
+              nuxt-link.button.is-small.is-light(v-if='scope.row.from !== identity' :to="`/${locale}/accounts/${scope.row.from}`")
+                hex-as-color(:hex="scope.row.from")
               div(v-else)
                 b-tag(type="success") self
-                //- hex-as-color(:hex="scope.row.returnValues._from")
+                //- hex-as-color(:hex="scope.row.from")
             b-table-column(field="Recipient")
-              nuxt-link.button.is-small.is-light(v-if='scope.row.returnValues._to !== identity' :to="`/${locale}/accounts/${scope.row.returnValues._to}`")
-                hex-as-color(:hex="scope.row.returnValues._to")
+              nuxt-link.button.is-small.is-light(v-if='scope.row.to !== identity' :to="`/${locale}/accounts/${scope.row.to}`")
+                hex-as-color(:hex="scope.row.to")
               div(v-else)
                 b-tag(type="success") self
-                //- hex-as-color(:hex="scope.row.returnValues._to")
+                //- hex-as-color(:hex="scope.row.to")
             b-table-column(field="Amount")
-              token-value(:value='scope.row.returnValues._value')
+              token-value(:value='scope.row.value')
             b-table-column(field="Transaction")
-              nuxt-link.button.is-small.is-light(:to='`/${locale}/tx/${scope.row.transactionHash}`')
-                hex-as-color(:hex="scope.row.transactionHash")
+              nuxt-link.button.is-small.is-light(:to='`/${locale}/tx/${scope.row.tx}`')
+                hex-as-color(:hex="scope.row.tx")
             b-table-column(field="Time")
               from-now(:time="scope.row.timestamp | toJSTimestamp")
 
