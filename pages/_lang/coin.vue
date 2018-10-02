@@ -40,24 +40,14 @@
                 tr 
                   td Total supply
                   td 500,000,000 MNC are issued initially and limited forever.
+                tr
+                  td Holders count
+                  td 
+                    nuxt-link(:to="`/${locale}/top`")
+                      span {{ holdersCount }}
         .tile(ref="chartWrapper")
           no-ssr
             line-chart(:data='chartData' :options="chartOptions")
-          //- no-ssr
-            apexcharts(width="500" type="bar" :options="chartOptions" :series="series")
-          //- vue-chart(
-            elementId="test"
-            :labels="[ '12am-3am', '3am-6am', '6am-9am', '9am-12pm', '12pm-3pm', '3pm-6pm', '6pm-9pm', '9pm-12am' ]"
-            title="My Awesome Chart"
-            type="axis-mixed"
-            :height="300"
-            :colors="['purple', '#ffa3ef', 'light-blue']"
-            :dataSets="chartData")
-          //- svg(:width="chartWidth" :height="chartHeight")
-          //-   path(:d="activityGraph")
-          //- div
-            h3.is-size-5 Weekly activity 
-            svg
 
 </template>
 
@@ -65,6 +55,7 @@
 import { Vue, Component } from "nuxt-property-decorator";
 import { AxiosInstance } from "axios";
 import { distanceInWordsToNow, format } from "date-fns";
+import { State } from "vuex-class";
 
 @Component({
   name: "page",
@@ -75,6 +66,7 @@ import { distanceInWordsToNow, format } from "date-fns";
   }
 })
 export default class extends Vue {
+  @State locale;
   chartOptions: any = { responsive: true, maintainAspectRatio: false };
 
   get chartData(): any {
