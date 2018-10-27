@@ -31,10 +31,8 @@
               date-time(:time="tx.timestamp | toJSTimestamp")
             .tile.is-child.tile-block.tile-bottom
               h3.is-size-6 
-                span {{ $t('status') }}
-              span.icon.has-text-success
-                i.mdi.mdi-check
-              span Mined
+                span {{ $t('nonce') }}
+              span {{ tx.nonce }}
             .tile.is-child.tile-block.tile-bottom
               div
                 h3.is-size-6 {{ $t('fee') }}
