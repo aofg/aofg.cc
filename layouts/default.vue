@@ -17,10 +17,14 @@
 
       div(:class="b('search')")
         b-field(:type='validSearch ? "" : "is-danger"')
-          b-input(:class="b('search-field')" type="text" v-model="searchString" :style="searchFieldCSS")
+          b-input(:class="b('search-field')" type="text" v-model="searchString" :style="searchFieldCSS" @keyup.native.enter='trySearch' @keyup.native.escape='toggleSearch')
           p.control
-            .button(@click='toggleSearch')
-              i.mdi(:class='searchIcon')
+            .button(v-if='!searchOpen' @click='toggleSearch')
+              i.mdi.mdi-magnify
+            .button(v-if='searchOpen && readyToSearch' @click='trySearch')
+              i.mdi.mdi-magnify
+            .button(v-if='searchOpen && !readyToSearch' @click='toggleSearch')
+              i.mdi.mdi-close
 
 
     nuxt(:class="b('content')")
@@ -53,17 +57,26 @@ export default class Layout extends Vue {
   searchString: string = "";
 
   toggleSearch() {
-    if (this.validSearch) {
-      // search
-      if (this.searchAddress) {
-        (<any>this).$router.push(
-          `/${this.locale}/accounts/${this.normalizedSearch}`
-        );
-      } else if (this.searchTx) {
-        (<any>this).$router.push(`/${this.locale}/tx/${this.normalizedSearch}`);
-      }
-    } else {
-      this.searchOpen = !this.searchOpen;
+    this.searchString = "";
+    this.searchOpen = !this.searchOpen;
+  }
+
+  handleKey(event: KeyboardEvent) {
+    console.log("test");
+    console.log(event.keyCode, String.fromCharCode(event.keyCode));
+  }
+
+  trySearch() {
+    if (this.readyToSearch) {
+      (<any>this).$router.push(
+        "/" +
+          [
+            this.locale,
+            this.searchTx ? "tx" : "accounts",
+            this.normalizedSearch
+          ].join("/")
+      );
+      this.searchString = "";
     }
   }
 
