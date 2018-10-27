@@ -12,12 +12,12 @@
   "hash": "Hash",
   "age": "Возраст",
 
-  "address": "Адресс",
+  "address": "Адрес",
   "balance": "Баланс",
 
   "holder": "Держатель",
   "incomings": "Дебет",
-  "outgoings": "Кредет",
+  "outgoings": "Кредит",
   "transactions": "Транзакции",
   "transaction": "Транзакция",
 

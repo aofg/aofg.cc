@@ -9,12 +9,19 @@
         br
         span(:class="b('brand-second')") Explorer
 
-      div(:class="b('menu')")
-        nuxt-link.button.is-white(:to='`/${locale}/`') {{ $t('recent-transactions') }}
-        nuxt-link.button.is-white(:to='`/${locale}/top`') {{ $t('top-holders') }}
-        nuxt-link.button.is-white(:to='`/${locale}/coin`') {{ $t('coin-summary') }}
-                
-        language-select
+      div(:class="b('menu')" :style="menuWrapperCSS")
+        nuxt-link.button.is-white(:class="b('menu-link')" :to='`/${locale}/`') {{ $t('recent-transactions') }}
+        nuxt-link.button.is-white(:class="b('menu-link')" :to='`/${locale}/top`') {{ $t('top-holders') }}
+        nuxt-link.button.is-white(:class="b('menu-link')" :to='`/${locale}/coin`') {{ $t('coin-summary') }}
+        language-select(:class="b('menu-link')")
+
+      div(:class="b('search')")
+        b-field(:type='validSearch ? "" : "is-danger"')
+          b-input(:class="b('search-field')" type="text" v-model="searchString" :style="searchFieldCSS")
+          p.control
+            .button(@click='toggleSearch')
+              i.mdi(:class='searchIcon')
+
 
     nuxt(:class="b('content')")
 
@@ -41,6 +48,68 @@ import LanguageSelect from "~/components/LanguageSelect.vue";
 })
 export default class Layout extends Vue {
   @State locale: string;
+
+  searchOpen: boolean = false;
+  searchString: string = "";
+
+  toggleSearch() {
+    if (this.validSearch) {
+      // search
+      if (this.searchAddress) {
+        (<any>this).$router.push(
+          `/${this.locale}/accounts/${this.normalizedSearch}`
+        );
+      } else if (this.searchTx) {
+        (<any>this).$router.push(`/${this.locale}/tx/${this.normalizedSearch}`);
+      }
+    } else {
+      this.searchOpen = !this.searchOpen;
+    }
+  }
+
+  get searchFieldCSS() {
+    return {
+      // display: this.searchOpen ? 'block' : 'none'
+      opacity: this.searchOpen ? 1 : 0,
+      "max-width": this.searchOpen ? "1000px" : "0"
+    };
+  }
+
+  get menuWrapperCSS() {
+    return {
+      overflow: "hidden",
+      opacity: this.searchOpen ? 0 : 1,
+      "max-width": this.searchOpen ? "0" : "1000px"
+    };
+  }
+
+  get validSearch() {
+    return this.readyToSearch && (this.searchTx || this.searchAddress);
+  }
+
+  get normalizedSearch() {
+    return this.searchString.trim().toLowerCase();
+  }
+
+  get searchTx() {
+    return !!this.normalizedSearch.match(/^0x([a-f0-9]{64})$/);
+  }
+
+  get searchAddress() {
+    return !!this.normalizedSearch.match(/^0x([a-f0-9]{40})$/);
+  }
+
+  get readyToSearch() {
+    return this.searchOpen && this.searchString.trim().length > 0;
+  }
+
+  get searchIcon() {
+    if (this.searchOpen) {
+      return this.validSearch ? "mdi-magnify" : "mdi-close-circle";
+    } else {
+      return "mdi-magnify";
+    }
+  }
 }
 </script>
 
