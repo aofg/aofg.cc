@@ -76,6 +76,7 @@ export default class Layout extends Vue {
             this.normalizedSearch
           ].join("/")
       );
+      this.searchOpen = false;
       this.searchString = "";
     }
   }
