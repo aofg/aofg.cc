@@ -3,7 +3,7 @@
     link(rel="stylesheet" href="//cdn.materialdesignicons.com/2.0.46/css/materialdesignicons.min.css")
     link(href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700,700i,800&amp;subset=cyrillic" rel="stylesheet")
     div.container(:class="b('header')")
-      img(:class="b('logotype')" src="/MainCoin.png")
+      img(:class="b('logotype')" src="/MainCoin-borderless.png")
       nuxt-link(:class="b('brand')" :to="`/${locale}`")
         strong(:class="b('brand-main')") Maincoin 
         br

@@ -12,6 +12,13 @@ $twitter-invert: findColorInvert($twitter);
 $dark: #3b3e43;
 $dark-invert: lighten(#bca480, 10%);
 
+$link: $primary;
+$link-invert: $primary-invert;
+$link-focus-border: $primary;
+
+$dropdown-item-active-color: $link-invert;
+$dropdown-item-active-background-color: $link;
+
 // Setup $colors to use as bulma classes (e.g. 'is-twitter')
 $colors: (
   "white": (
@@ -64,6 +71,9 @@ $colors: (
 $link: $primary;
 $link-invert: $primary-invert;
 $link-focus-border: $primary;
+
+$input-shadow: none;
+$input-border-color: transparent;
 
 @import "~bulma";
 @import "~buefy/src/scss/buefy";
