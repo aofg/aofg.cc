@@ -22,7 +22,7 @@ const host =
 module.exports = {
   env: {
     baseUrl: process.env.BASE_URL || `http://${host}:${port}`,
-    ...process.env
+    BACKEND_URL: process.env.BACKEND_URL || "https://api.maincoin.money"
   },
   router: {
     middleware: "i18n"
@@ -82,12 +82,12 @@ module.exports = {
     ]
   },
   /*
-  ** Customize the progress-bar color
-  */
+   ** Customize the progress-bar color
+   */
   loading: { color: "#3B8070" },
   /*
-  ** Build configuration
-  */
+   ** Build configuration
+   */
   css: ["~/assets/scss/main.scss"],
   build: {
     babel: {
