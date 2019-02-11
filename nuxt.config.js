@@ -1,4 +1,9 @@
+const axios = require("axios");
+
 const parseArgs = require("minimist");
+require("https").globalAgent.options.ca = require("ssl-root-cas/latest").create();
+axios.defaults.httpsAgent = require("https").globalAgent;
+
 const argv = parseArgs(process.argv.slice(2), {
   alias: {
     H: "hostname",

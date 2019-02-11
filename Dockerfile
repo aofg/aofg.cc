@@ -8,6 +8,7 @@ RUN apk add --no-cache --update \
   git
 
 WORKDIR /usr/src/app
-COPY . .
+COPY package.json . 
 RUN yarn
+COPY . .
 RUN yarn build
