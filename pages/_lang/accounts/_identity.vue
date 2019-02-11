@@ -60,9 +60,11 @@
 
 
 <script lang="ts">
-import axios from "axios";
+import _axios from "axios";
 import https from "https";
-axios.defaults.httpsAgent = new https.Agent({ rejectUnauthorized: false });
+const axios = _axios.create({
+  httpsAgent: new https.Agent({ rejectUnauthorized: false })
+});
 
 import { Component, Vue, Prop, Watch } from "nuxt-property-decorator";
 import HexAsColors from "~/components/HexAsColors.vue";
