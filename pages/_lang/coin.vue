@@ -52,17 +52,27 @@
 </template>
 
 <script lang="ts">
+import axios from "axios";
 import { Vue, Component } from "nuxt-property-decorator";
 import { AxiosInstance } from "axios";
 import { distanceInWordsToNow, format } from "date-fns";
 import { State } from "vuex-class";
 
-@Component({
+@Component(<any>{
   name: "page",
   mounted() {
     this.chartRect = (this.$refs
       .chartWrapper as Element).getBoundingClientRect();
-    this.fetchInfo();
+  },
+  async asyncData(ctx) {
+    const { data } = await axios.get(`${process.env.BACKEND_URL}/info`);
+
+    console.log(data);
+
+    return {
+      activity: data.data.daysActivity,
+      holdersCount: data.data.holdersCount
+    };
   }
 })
 export default class extends Vue {
@@ -71,12 +81,12 @@ export default class extends Vue {
 
   get chartData(): any {
     return {
-      labels: this.activity.map(a => format(a.day * 1000, "D MMM")),
+      labels: (this.activity || []).map(a => format(a.day * 1000, "D MMM")),
       datasets: [
         {
           label: "Transactions",
           backgroundColor: "#bca480",
-          data: this.activity.map(a => a.count)
+          data: (this.activity || []).map(a => a.count)
         }
       ]
     };
@@ -111,20 +121,6 @@ export default class extends Vue {
   get activityGraph() {
     return "M0 0 H 100 V 100 H 0 Z";
   }
-
-  async fetchInfo() {
-    const { data } = await (<AxiosInstance>(<any>this).$axios).get(
-      `${process.env.BACKEND_URL}/info`
-    );
-
-    console.log(data);
-
-    this.activity = data.data.daysActivity;
-    this.holdersCount = data.data.holdersCount;
-  }
-  // get dimensions () {
-  //   return (this.$refs.chartWrapper as Element).getBoundingClientRect()
-  // }
 }
 </script>
 

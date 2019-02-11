@@ -14,12 +14,12 @@
               nuxt-link.button.is-small.is-light(:to='`/${locale}/accounts/${scope.row.to}`')
                 hex-as-color(:hex="scope.row.to")
             b-table-column(field="Amount")
-              token-value(:value='scope.row.value')
+              token-value(:value='scope.row.amount')
             b-table-column(field="Transaction")
-              nuxt-link.button.is-small.is-light(:to='`/${locale}/tx/${scope.row.tx}`')
-                hex-as-color(:hex="scope.row.tx")
+              nuxt-link.button.is-small.is-light(:to='`/${locale}/tx/${scope.row.txHash}`')
+                hex-as-color(:hex="scope.row.txHash")
             b-table-column(field="Time")
-              from-now(:time="scope.row.timestamp | toJSTimestamp")
+              from-now(:time="scope.row.date | toJSTimestamp")
         
         b-pagination(:class="b('pagination')" v-if='transfers'
                      :total='transfers.total'
@@ -54,7 +54,7 @@ interface EventModel {
   raw?: { data: string; topics: string[] };
 }
 
-@Component({
+@Component(<any>{
   name: "page",
   components: {
     "hex-as-color": HexAsColors,
@@ -65,7 +65,28 @@ interface EventModel {
     toJSTimestamp(unix: number) {
       return new Date(unix * 1000);
     }
-  }
+  },
+  async asyncData({ route }) {
+    const { params, query } = route;
+    console.log(route.query);
+
+    query.show = parseInt(query.show || "15");
+    query.page = parseInt(query.page || "1");
+
+    const { data } = await axios.get(
+      `${process.env.BACKEND_URL}/txs?limit=${query.show}&page=${query.page}`
+    );
+
+    console.assert(data.data, "transfers array is required");
+
+    return {
+      transfers: data.data,
+      show: query.show,
+      page: query.page,
+      loading: false
+    };
+  },
+  watchQuery: ["page", "show"]
 })
 export default class extends Vue {
   @State locale: string;
@@ -102,21 +123,21 @@ export default class extends Vue {
     return [];
   }
 
-  loading: boolean = true;
-
-  @Async(async function() {
+  @Watch("page")
+  @Watch("show")
+  onPagination() {
     this.loading = true;
-    console.log("load recent", `${process.env.BACKEND_URL}`);
-    const { data } = await axios.get(
-      `${process.env.BACKEND_URL}/events?limit=${this.show}&offset=${
-        this.offset
-      }`
-    );
+    (<any>this).$router.push({
+      to: "/",
+      query: {
+        show: this.show,
+        page: this.page
+      }
+    });
+  }
 
-    await new Promise(resolve => setTimeout(resolve, 350));
-    this.loading = false;
-    return data.data;
-  })
+  loading: boolean = false;
+
   transfers: {
     total: number;
     events: EventModel[];

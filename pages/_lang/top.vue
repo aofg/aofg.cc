@@ -21,38 +21,75 @@
 <script lang="ts">
 import axios from "axios";
 import { State } from "vuex-class";
-import { Component, Vue } from "nuxt-property-decorator";
+import { Component, Vue, Watch } from "nuxt-property-decorator";
 import { Async } from "~/plugins/async-computed.plugin";
 import HexAsColors from "~/components/HexAsColors.vue";
 import TokenValue from "~/components/TokenValue.vue";
+import bn from "bn.js";
 
-@Component({
+@Component(<any>{
   name: "page",
   components: {
     "hex-as-color": HexAsColors,
     "token-value": TokenValue
-  }
+  },
+  async asyncData({ route }) {
+    const { params, query } = route;
+    console.log(route.query);
+
+    query.show = parseInt(query.show || "15");
+    query.page = parseInt(query.page || "1");
+
+    const { data } = await axios.get(
+      `${process.env.BACKEND_URL}/top?limit=${query.show}&page=${query.page}`
+    );
+
+    console.assert(data.data.holders, "holders list is required");
+
+    return {
+      loaded: {
+        accounts: data.data.holders,
+        total: data.data.total
+      },
+      show: query.show,
+      page: query.page,
+      loading: false
+    };
+  },
+  watchQuery: ["page", "show"]
 })
 export default class extends Vue {
   @State locale;
   show: number = 15;
   page: number = 1;
   loading: boolean = true;
-  @Async(async function() {
+  // @Async(async function() {
+  //   this.loading = true;
+  //   const { data } = await axios.get(
+  //     `${process.env.BACKEND_URL}/top?limit=${this.show}&offset=${this.offset}`
+  //   );
+
+  //   this.loading = false;
+  //   this.loaded = {
+  //     ...data.data,
+  //     test: "test"
+  //   };
+
+  //   return data;
+  // })
+  // tmpLoaded: any;
+
+  @Watch("page")
+  @Watch("show")
+  onPagination() {
     this.loading = true;
-    const { data } = await axios.get(
-      `${process.env.BACKEND_URL}/top?limit=${this.show}&offset=${this.offset}`
-    );
-
-    this.loading = false;
-    this.loaded = {
-      ...data.data,
-      test: "test"
-    };
-
-    return data;
-  })
-  tmpLoaded: any;
+    (<any>this).$router.push({
+      query: {
+        show: this.show,
+        page: this.page
+      }
+    });
+  }
 
   get columns() {
     return [
@@ -64,11 +101,9 @@ export default class extends Vue {
       }
     ];
   }
+
   loaded: any = {
     accounts: []
   };
-  get offset(): number {
-    return (this.page - 1) * this.show;
-  }
 }
 </script>

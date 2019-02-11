@@ -18,7 +18,7 @@
             .tile.is-child
               div
                 h3.is-size-5 {{ $t('transactions') }}
-                span {{account.txCount}}
+                span(v-if='transfers') {{ transfers.total }}
             .tile.is-child.is-hidden-touch
               div 
                 h3.is-size-5 {{ $t('incomings') }}
@@ -44,14 +44,13 @@
                 hex-as-color(:hex="scope.row.to")
               div(v-else)
                 b-tag(type="success") self
-                //- hex-as-color(:hex="scope.row.to")
             b-table-column(field="Amount")
-              token-value(:value='scope.row.value')
+              token-value(:value='scope.row.amount')
             b-table-column(field="Transaction")
-              nuxt-link.button.is-small.is-light(:to='`/${locale}/tx/${scope.row.tx}`')
-                hex-as-color(:hex="scope.row.tx")
+              nuxt-link.button.is-small.is-light(:to='`/${locale}/tx/${scope.row.txHash}`')
+                hex-as-color(:hex="scope.row.txHash")
             b-table-column(field="Time")
-              from-now(:time="scope.row.timestamp | toJSTimestamp")
+              from-now(:time="scope.row.date | toJSTimestamp")
 
         b-pagination(:class="b('pagination')" v-if='transfers && transfers.total > show'
                      :total='transfers.total'
@@ -61,7 +60,7 @@
 
 
 <script lang="ts">
-import { Component, Vue, Prop } from "nuxt-property-decorator";
+import { Component, Vue, Prop, Watch } from "nuxt-property-decorator";
 import HexAsColors from "~/components/HexAsColors.vue";
 import TokenValue from "~/components/TokenValue.vue";
 import FromNow from "~/components/FromNow.vue";
@@ -84,28 +83,72 @@ interface EventModel {
   raw?: { data: string; topics: string[] };
 }
 
-@Component({
+@Component(<any>{
   name: "page",
   components: {
     "hex-as-color": HexAsColors,
     "token-value": TokenValue,
     "from-now": FromNow
   },
-  mounted() {
-    this.identity = this.$route.params.identity;
-  },
   filters: {
     toJSTimestamp(unix: number) {
       return new Date(unix * 1000);
     }
-  }
+  },
+  async asyncData({ route }) {
+    const { params, query } = route;
+    console.log(route.query);
+
+    query.show = parseInt(query.show || "15");
+    query.page = parseInt(query.page || "1");
+
+    const { data } = await axios.get(
+      `${process.env.BACKEND_URL}/holder/${params.identity}?limit=${
+        query.show
+      }&page=${query.page}`
+    );
+
+    await new Promise(resolve => setTimeout(resolve, 300));
+
+    return {
+      identity: params.identity,
+      account: data.data.holder,
+      transfers: {
+        events: data.data.transfers,
+        total: data.data.total
+      },
+      show: query.show,
+      page: query.page,
+      loading: false
+    };
+  },
+  watchQuery: ["page", "show"]
 })
 export default class extends Vue {
   @State locale;
 
-  identity: string = "";
+  loading: boolean = false;
+  indentity: string = "0x0";
   page: number = 1;
   show: number = 15;
+  account: any = {};
+  transfers: {
+    total: number;
+    events: EventModel[];
+  } | null = null;
+  defaultOpen: string[] = [];
+
+  @Watch("page")
+  @Watch("show")
+  onPagination() {
+    this.loading = true;
+    (<any>this).$router.push({
+      query: {
+        show: this.show,
+        page: this.page
+      }
+    });
+  }
 
   get columns() {
     return [
@@ -131,45 +174,6 @@ export default class extends Vue {
       }
     ];
   }
-
-  get offset(): number {
-    return (this.page - 1) * this.show;
-  }
-
-  @Async(async function() {
-    if (!this.identity) {
-      return;
-    }
-    const { data } = await axios.get(
-      `${process.env.BACKEND_URL}/account/${this.identity}`
-    );
-
-    return data.data;
-  })
-  account: any;
-
-  @Async(async function() {
-    if (!this.identity) {
-      return;
-    }
-    this.loading = true;
-    const { data } = await axios.get(
-      `${process.env.BACKEND_URL}/events?` +
-        `limit=${this.show}&` +
-        `offset=${this.offset}&` +
-        `involved=${this.identity}`
-    );
-
-    await new Promise(resolve => setTimeout(resolve, 350));
-    console.log(data.data);
-    this.loading = false;
-    return data.data;
-  })
-  transfers: {
-    total: number;
-    events: EventModel[];
-  } | null = null;
-  defaultOpen: string[] = [];
 }
 </script>
 

@@ -15,7 +15,7 @@ import { Component, Vue, Prop } from "nuxt-property-decorator";
   name: "hex-as-color"
 })
 export default class extends Vue {
-  @Prop({ required: true })
+  @Prop({ required: true, default: "0x0000" })
   hex: string;
 
   @Prop({ default: 0 })

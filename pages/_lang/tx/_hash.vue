@@ -5,30 +5,30 @@
           h2.is-size-2
             span {{ $t('transaction') }} 
 
-        div(:class="b('header')")
-          .tile(v-if='log')
+        div(:class="b('header')" v-for='transfer in transfers')
+          .tile
             .tile.is-child.tile-sender
               h3.is-size-5 
                 span {{ $t('sender') }}
-                nuxt-link.button.is-small.is-light(:to="`/${locale}/accounts/${from}`")
-                  hex-as-color(:hex="from")
-              span(style="font-style: monospace; font-size: 80%")  {{ from }}
+                nuxt-link.button.is-small.is-light(:to="`/${locale}/accounts/${transfer.from}`")
+                  hex-as-color(:hex="transfer.from")
+              span(style="font-style: monospace; font-size: 80%")  {{ transfer.from }}
             .tile.is-child.tile-amount
               h3.is-size-4
-                token-value(:value='value')
+                token-value(:value='transfer.amount')
             .tile.is-child.tile-recipient
               h3.is-size-5 
                 span {{ $t('recipient') }}
-                nuxt-link.button.is-small.is-light(:to="`/${locale}/accounts/${to}`")
-                  hex-as-color(:hex="to")
-              span(style="font-style: monospace; font-size: 80%") {{ to }}
+                nuxt-link.button.is-small.is-light(:to="`/${locale}/accounts/${transfer.to}`")
+                  hex-as-color(:hex="transfer.to")
+              span(style="font-style: monospace; font-size: 80%") {{ transfer.to }}
 
         div(:class="b('header')")
-          .tile(v-if='log').tiles-bottom
+          .tile.tiles-bottom
             .tile.is-child.tile-time.tile-bottom
               h3.is-size-6 
                 span {{ $t('time') }}
-              date-time(:time="tx.timestamp | toJSTimestamp")
+              date-time(:time="date | toJSTimestamp")
             .tile.is-child.tile-block.tile-bottom
               h3.is-size-6 
                 span {{ $t('nonce') }}
@@ -126,7 +126,7 @@ import { distanceInWordsToNow, format } from "date-fns";
 import BN from "bn.js";
 import { State } from "vuex-class";
 
-@Component({
+@Component(<any>{
   name: "page",
   components: {
     "hex-as-color": HexAsColors,
@@ -140,6 +140,22 @@ import { State } from "vuex-class";
     toJSTimestamp(unix: number) {
       return new Date(unix * 1000);
     }
+  },
+  async asyncData({ route }) {
+    if (route && route.params && route.params.hash) {
+      console.log(route.params.hash);
+    }
+    const { data } = await axios.get(
+      `${process.env.BACKEND_URL}/tx/${route.params.hash}`
+    );
+
+    console.assert(data.data.tx, "tx is required");
+    console.assert(data.data.transfers, "tx is required");
+
+    return {
+      tx: data.data.tx,
+      transfers: data.data.transfers
+    };
   }
 })
 export default class extends Vue {
@@ -147,54 +163,11 @@ export default class extends Vue {
 
   hash: string = "";
 
-  @Async(async function() {
-    if (!this.hash) {
-      return;
-    }
-    const { data } = await axios.get(
-      `${process.env.BACKEND_URL}/tx/${this.hash}`
-    );
-
-    return data.data[0];
-  })
   tx: any;
+  transfers: any[];
 
-  get env() {
-    return process.env;
-  }
-
-  get log() {
-    if (this.tx && Array.isArray(this.tx.logs)) {
-      return this.tx.logs.filter(
-        log =>
-          log.topics[0] ===
-          "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef"
-      )[0];
-    }
-
-    return null;
-  }
-
-  get value() {
-    if (this.log) {
-      return new BN((this.log.data as string).slice(2), 16).toString(10);
-    }
-
-    return null;
-  }
-
-  get from() {
-    if (this.log) {
-      return "0x" + this.log.topics[1].slice(26);
-    }
-    return null;
-  }
-
-  get to() {
-    if (this.log) {
-      return "0x" + this.log.topics[2].slice(26);
-    }
-    return null;
+  get date() {
+    return this.transfers[0].date;
   }
 
   get fee() {
