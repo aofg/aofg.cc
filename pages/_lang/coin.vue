@@ -52,11 +52,9 @@
 </template>
 
 <script lang="ts">
-import _axios from "axios";
+import axios from "axios";
 import https from "https";
-const axios = _axios.create({
-  httpsAgent: new https.Agent({ rejectUnauthorized: false })
-});
+axios.defaults.httpsAgent = new https.Agent({ rejectUnauthorized: false });
 
 import { Vue, Component } from "nuxt-property-decorator";
 import { AxiosInstance } from "axios";
