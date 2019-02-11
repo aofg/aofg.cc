@@ -116,12 +116,15 @@
 
 
 <script lang="ts">
+import axios from "axios";
+import https from "https";
+axios.defaults.httpsAgent = new https.Agent({ rejectUnauthorized: false });
+
 import { Component, Vue, Prop } from "nuxt-property-decorator";
 import HexAsColors from "~/components/HexAsColors.vue";
 import TokenValue from "~/components/TokenValue.vue";
 import Datetime from "~/components/Datetime.vue";
 import { Async } from "~/plugins/async-computed.plugin";
-import axios from "axios";
 import { distanceInWordsToNow, format } from "date-fns";
 import BN from "bn.js";
 import { State } from "vuex-class";

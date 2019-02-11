@@ -53,6 +53,9 @@
 
 <script lang="ts">
 import axios from "axios";
+import https from "https";
+axios.defaults.httpsAgent = new https.Agent({ rejectUnauthorized: false });
+
 import { Vue, Component } from "nuxt-property-decorator";
 import { AxiosInstance } from "axios";
 import { distanceInWordsToNow, format } from "date-fns";

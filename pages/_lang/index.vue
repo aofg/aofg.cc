@@ -30,6 +30,10 @@
 
 
 <script lang="ts">
+import axios from "axios";
+import https from "https";
+axios.defaults.httpsAgent = new https.Agent({ rejectUnauthorized: false });
+
 import { Component, Vue, Watch } from "nuxt-property-decorator";
 import { State } from "vuex-class";
 
@@ -37,7 +41,6 @@ import HexAsColors from "~/components/HexAsColors.vue";
 import FromNow from "~/components/FromNow.vue";
 import TokenValue from "~/components/TokenValue.vue";
 import { Async } from "~/plugins/async-computed.plugin";
-import axios from "axios";
 import { distanceInWordsToNow, format } from "date-fns";
 
 interface EventModel {
