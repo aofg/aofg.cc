@@ -24,7 +24,7 @@
   "scripts": {
     "dev": "nuxt",
     "build": "nuxt build",
-    "start": "BACK_HOST=localhost BACK_PORT=4000 nuxt start",
+    "start": "nuxt start",
     "generate": "nuxt generate"
   },
   "devDependencies": {
