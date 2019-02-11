@@ -20,9 +20,6 @@
 
 <script lang="ts">
 import axios from "axios";
-import https from "https";
-axios.defaults.httpsAgent = new https.Agent({ rejectUnauthorized: false });
-
 import { State } from "vuex-class";
 import { Component, Vue, Watch } from "nuxt-property-decorator";
 import { Async } from "~/plugins/async-computed.plugin";
