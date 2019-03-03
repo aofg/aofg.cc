@@ -23,10 +23,6 @@ const host =
   "localhost";
 
 module.exports = {
-  env: {
-    baseUrl: process.env.BASE_URL || `http://${host}:${port}`,
-    BACKEND_URL: process.env.BACKEND_URL || "https://api.maincoin.money"
-  },
   router: {
     middleware: "i18n"
   },
@@ -101,7 +97,24 @@ module.exports = {
     "@nuxtjs/axios",
     "nuxt-buefy",
     "@nuxtjs/dotenv",
-    "~/modules/typescript.js"
+    "~/modules/typescript.js",
+    [
+      "nuxt-env",
+      {
+        keys: [
+          // env: {
+          //   baseUrl: process.env.BASE_URL || `http://${host}:${port}`,
+          //   BACKEND_URL: process.env.BACKEND_URL || "https://api.maincoin.money"
+          // },
+          // 'TEST_ENV_VAR', // Basic usage—equivalent of { key: 'TEST_ENV_VAR' }
+          // { key: 'OTHER_ENV_VAR', default: 'defaultValue' } // Specify a default value
+          // { key: 'THIRD_ENV_VAR', secret: true } // Only inject the var server side
+          // { key: 'ANOTHER_ENV_VAR', name: 'MY_ENV_VAR' } // Rename the variable
+          { key: "BASE_URL", default: `http://${host}:${port}` },
+          { key: "BACKEND_URL", default: `https://api.maincoin.money` }
+        ]
+      }
+    ]
   ],
   axios: {}
 };
