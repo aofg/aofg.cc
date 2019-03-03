@@ -39,7 +39,7 @@
                   td 0x9f0f1be08591ab7d990faf910b38ed5d60e4d5bf
                 tr 
                   td Total supply
-                  td 500,000,000 MNC are issued initially and limited forever.
+                  td 380,020,246 MNC are issued initially and limited forever.
                 tr
                   td Holders count
                   td 
