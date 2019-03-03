@@ -33,7 +33,7 @@ import bn from "bn.js";
     "hex-as-color": HexAsColors,
     "token-value": TokenValue
   },
-  async asyncData({ route }) {
+  async asyncData({ route, app }) {
     const { params, query } = route;
     console.log(route.query);
 
@@ -41,7 +41,7 @@ import bn from "bn.js";
     query.page = parseInt(query.page || "1");
 
     const { data } = await axios.get(
-      `${this.$env.BACKEND_URL}/top?limit=${query.show}&page=${query.page}`
+      `${app.$env.BACKEND_URL}/top?limit=${query.show}&page=${query.page}`
     );
 
     console.assert(data.data.holders, "holders list is required");
@@ -63,22 +63,7 @@ export default class extends Vue {
   show: number = 15;
   page: number = 1;
   loading: boolean = true;
-  // @Async(async function() {
-  //   this.loading = true;
-  //   const { data } = await axios.get(
-  //     `${this.$env.BACKEND_URL}/top?limit=${this.show}&offset=${this.offset}`
-  //   );
-
-  //   this.loading = false;
-  //   this.loaded = {
-  //     ...data.data,
-  //     test: "test"
-  //   };
-
-  //   return data;
-  // })
-  // tmpLoaded: any;
-
+  
   @Watch("page")
   @Watch("show")
   onPagination() {

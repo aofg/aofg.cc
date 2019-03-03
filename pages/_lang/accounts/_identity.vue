@@ -95,7 +95,7 @@ interface EventModel {
       return new Date(unix * 1000);
     }
   },
-  async asyncData({ route }) {
+  async asyncData({ route, app }) {
     const { params, query } = route;
     console.log(route.query);
 
@@ -103,7 +103,7 @@ interface EventModel {
     query.page = parseInt(query.page || "1");
 
     const { data } = await axios.get(
-      `${this.$env.BACKEND_URL}/holder/${params.identity}?limit=${
+      `${app.$env.BACKEND_URL}/holder/${params.identity}?limit=${
         query.show
       }&page=${query.page}`
     );

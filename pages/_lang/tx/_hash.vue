@@ -141,12 +141,12 @@ import { State } from "vuex-class";
       return new Date(unix * 1000);
     }
   },
-  async asyncData({ route }) {
+  async asyncData({ route, app }) {
     if (route && route.params && route.params.hash) {
       console.log(route.params.hash);
     }
     const { data } = await axios.get(
-      `${this.$env.BACKEND_URL}/tx/${route.params.hash}`
+      `${app.$env.BACKEND_URL}/tx/${route.params.hash}`
     );
 
     console.assert(data.data.tx, "tx is required");
