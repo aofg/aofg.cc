@@ -18,15 +18,15 @@
             .tile.is-child
               div
                 h3.is-size-5 {{ $t('transactions') }}
-                span(v-if='transfers') {{ transfers.total }}
+                span(v-if='transfers') {{ transfers.balance }}
             .tile.is-child.is-hidden-touch
               div 
                 h3.is-size-5 {{ $t('incomings') }}
-                token-value(:value='account.incomingSum')
+                token-value(:value='account.incoming')
             .tile.is-child.is-hidden-touch
               div
                 h3.is-size-5 {{ $t('outgoings') }}
-                token-value(:value='account.outgoingSum')
+                token-value(:value='account.outgoing')
             .tile.is-child
               div
                 h3.is-size-5 {{ $t('balance') }}
