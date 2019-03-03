@@ -146,7 +146,7 @@ import { State } from "vuex-class";
       console.log(route.params.hash);
     }
     const { data } = await axios.get(
-      `${process.env.BACKEND_URL}/tx/${route.params.hash}`
+      `${this.$env.BACKEND_URL}/tx/${route.params.hash}`
     );
 
     console.assert(data.data.tx, "tx is required");

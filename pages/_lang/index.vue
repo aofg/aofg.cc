@@ -74,7 +74,7 @@ interface EventModel {
     query.page = parseInt(query.page || "1");
 
     const { data } = await axios.get(
-      `${process.env.BACKEND_URL}/txs?limit=${query.show}&page=${query.page}`
+      `${this.$env.BACKEND_URL}/txs?limit=${query.show}&page=${query.page}`
     );
 
     console.assert(data.data, "transfers array is required");

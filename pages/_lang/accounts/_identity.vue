@@ -103,7 +103,7 @@ interface EventModel {
     query.page = parseInt(query.page || "1");
 
     const { data } = await axios.get(
-      `${process.env.BACKEND_URL}/holder/${params.identity}?limit=${
+      `${this.$env.BACKEND_URL}/holder/${params.identity}?limit=${
         query.show
       }&page=${query.page}`
     );

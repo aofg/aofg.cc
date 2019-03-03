@@ -41,7 +41,7 @@ import bn from "bn.js";
     query.page = parseInt(query.page || "1");
 
     const { data } = await axios.get(
-      `${process.env.BACKEND_URL}/top?limit=${query.show}&page=${query.page}`
+      `${this.$env.BACKEND_URL}/top?limit=${query.show}&page=${query.page}`
     );
 
     console.assert(data.data.holders, "holders list is required");
@@ -66,7 +66,7 @@ export default class extends Vue {
   // @Async(async function() {
   //   this.loading = true;
   //   const { data } = await axios.get(
-  //     `${process.env.BACKEND_URL}/top?limit=${this.show}&offset=${this.offset}`
+  //     `${this.$env.BACKEND_URL}/top?limit=${this.show}&offset=${this.offset}`
   //   );
 
   //   this.loading = false;

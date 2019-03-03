@@ -65,7 +65,7 @@ import { State } from "vuex-class";
       .chartWrapper as Element).getBoundingClientRect();
   },
   async asyncData(ctx) {
-    const { data } = await axios.get(`${process.env.BACKEND_URL}/info`);
+    const { data } = await axios.get(`${this.$env.BACKEND_URL}/info`);
 
     console.log(data);
 
