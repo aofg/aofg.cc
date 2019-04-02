@@ -1,0 +1,531 @@
+@tailwind preflight;
+@tailwind components;
+
+/* typography */
+.t-0 {
+    font-size: resolve(72 / 16rem);
+    line-height: resolve(80 / 16rem);
+}
+.t-1 {
+    font-size: resolve(56 / 16rem);
+    line-height: resolve(64 / 16rem);
+}
+.t-2 {
+    font-size: resolve(40 / 16rem);
+    line-height: resolve(48 / 16rem);
+}
+.t-3 {
+    font-size: resolve(32 / 16rem);
+    line-height: resolve(48 / 16rem);
+}
+.t-4 {
+    font-size: resolve(24 / 16rem);
+    line-height: resolve(32 / 16rem);
+}
+.t-5 {
+    font-size: resolve(20 / 16rem);
+    line-height: resolve(32 / 16rem);
+}
+.t-6 {
+    font-size: resolve(16 / 16rem);
+    line-height: resolve(24 / 16rem);
+}
+
+.t-mono {
+    @apply font-mono;
+    font-size: resolve(18/16rem);
+    line-height: resolve(32/16rem);
+}
+
+.t-base {
+    @apply t-5 
+}
+.t-note {
+    @apply t-6
+}
+
+.el-text {
+    @apply font-sans text-grey-darkest;
+}
+
+.el-h { 
+    @apply font-serif mt-xl mb-xs text-grey-darkest;
+}
+
+.el-a {
+    @apply el-text text-blue;
+    text-decoration: none;
+
+    transition: color 0.2s ease;
+
+    &:focus {
+        @apply bg-blue text-white rounded;
+        outline: 0;
+        box-shadow: none;
+    }
+}
+
+.el-p {
+    @apply mb-s;
+}
+
+.el-h0 { @apply t-0; }
+.el-h1 { @apply t-1; }
+.el-h2 { @apply t-2; }
+.el-h3 { @apply t-3; }
+.el-h4 { @apply t-4; }
+.el-h5 { @apply t-5; }
+.el-h6 { @apply t-6; }
+
+.el-table {
+    @apply table-auto rounded
+    ;
+}
+.el-thead {
+    @apply bg-grey-lighter;
+}
+.el-tbody {
+    @apply bg-white;
+}
+.el-tr {
+    &:nth-child(2n) {
+        @apply bg-grey-lightest;
+    }
+}
+.el-th {
+    @apply p-xs border-grey-lighter border-solid border;
+}
+.el-td {
+    @apply p-xs border-grey-lighter border-solid border;
+}
+
+.el-code {
+    @apply t-mono bg-grey-lightest border-grey-lighter border-solid border text-black rounded pl-xs pr-xs;
+}
+.el-code-block {
+    @apply el-code p-s mb-xl;
+
+    overflow: auto;
+    max-height: 550px;
+}
+.el-blockquote {
+    @apply pl-m border-solid border-l-4 border-grey-lighter;
+}
+
+body { @apply el-text t-base; overflow-y: scroll; }
+h1 { @apply el-h el-h1; }
+h2 { @apply el-h el-h2; }
+h3 { @apply el-h el-h3; }
+h4 { @apply el-h el-h4; }
+h5 { @apply el-h el-h5; }
+h6 { @apply el-h el-h6; }
+a { @apply el-a; }
+
+table { @apply el-table; }
+thead { @apply el-thead; }
+tbody { @apply el-tbody; }
+tr { @apply el-tr; }
+th { @apply el-th; }
+td { @apply el-td; }
+
+blockquote { @apply el-blockquote; }
+
+.row {
+    @apply flex flex-wrap;
+}
+
+.col {
+    flex-basis: 0;
+    flex-grow: 0;
+    flex-shrink: 0;
+    max-width: 100%;
+    @apply px-s;
+}
+
+.col-1 {
+    @apply col;
+    flex: 0 0 resolve(100 / 12)%;
+    max-width: resolve(100 / 12)%;
+}
+.col-2 {
+    @apply col;
+    flex: 0 0 resolve((100 / 12) * 2)%;
+    max-width: resolve((100 / 12) * 2)%;
+}
+.col-3 {
+    @apply col;
+    flex: 0 0 resolve((100 / 12) * 3)%;
+    max-width: resolve((100 / 12) * 3)%;
+}
+.col-4 {
+    @apply col;
+    flex: 0 0 resolve((100 / 12) * 4)%;
+    max-width: resolve((100 / 12) * 4)%;
+}
+.col-5 {
+    @apply col;
+    flex: 0 0 resolve((100 / 12) * 5)%;
+    max-width: resolve((100 / 12) * 5)%;
+}
+.col-6 {
+    @apply col;
+    flex: 0 0 resolve((100 / 12) * 6)%;
+    max-width: resolve((100 / 12) * 6)%;
+}
+.col-7 {
+    @apply col;
+    flex: 0 0 resolve((100 / 12) * 7)%;
+    max-width: resolve((100 / 12) * 7)%;
+}
+.col-8 {
+    @apply col;
+    flex: 0 0 resolve((100 / 12) * 8)%;
+    max-width: resolve((100 / 12) * 8)%;
+}
+.col-9 {
+    @apply col;
+    flex: 0 0 resolve((100 / 12) * 9)%;
+    max-width: resolve((100 / 12) * 9)%;
+}
+.col-10 {
+    @apply col;
+    flex: 0 0 resolve((100 / 12) * 10)%;
+    max-width: resolve((100 / 12) * 10)%;
+}
+.col-11 {
+    @apply col;
+    flex: 0 0 resolve((100 / 12) * 11)%;
+    max-width: resolve((100 / 12) * 11)%;
+}
+.col-12 {
+    @apply col;
+    flex: 0 0 resolve((100 / 12) * 12)%;
+    max-width: resolve((100 / 12) * 12)%;
+}
+
+.md {
+    &__heading {
+       @apply el-h;
+
+       &--h1 { @apply el-h1; }
+       &--h2 { @apply el-h2; }
+       &--h3 { @apply el-h3; }
+       &--h4 { @apply el-h4; }
+       &--h5 { @apply el-h5; }
+       &--h6 { @apply el-h6; }
+    }
+
+    &__link {
+        @apply el-a;
+    }
+
+    &__paragraph {
+        @apply el-text el-p;
+    }
+
+    &__table {}
+    &__thead {}
+    &__tbody {}
+    &__tbody {}
+    &__tr {
+        @apply el-tr;
+    }
+    &__th {}
+    &__td {
+    }
+
+    &__code_inline {
+        @apply el-code;
+
+        position: relative;
+        display: inline-block;
+        white-space: normal;
+    }
+
+    &__blockquote { @apply el-blockquote; }
+
+
+    /* prism hack */
+    pre,
+    &__code_block {
+        @apply el-code el-code-block;
+    }
+}
+
+.el-navtree {
+  @apply text-black font-bold;
+  list-style: none;
+  padding: 0;
+
+  &__pages {
+    @apply text-black font-normal;
+    list-style: none;
+    padding: 0;
+  }
+
+  &__page {
+    .el-navtree__link {
+        @apply t-6;
+
+        &--level {
+            &-0 { padding-left: 2rem; }
+            &-1 { padding-left: 4rem; }
+            &-2 { padding-left: 6rem; }
+            &-3 { padding-left: 8rem; }
+        }
+    }
+  }
+
+  &__item {
+  }
+
+  &__link {
+    @apply text-grey-darkest p-xs;
+    position: relative;
+    display: block;
+
+    &--level {
+      &-1 { padding-left: 2rem; }
+      &-2 { padding-left: 4rem; }
+      &-3 { padding-left: 6rem; }
+
+    }
+
+    &--level-3,
+    &--level-4,
+    &--level-2 {
+      @apply text-grey-darker;
+    }
+
+    &:not(.el-navtree__link--level-0) {
+        @apply t-6;
+    }
+
+    &:hover,
+    &:active {
+      @apply text-black;
+    }
+
+    &:focus {
+      @apply bg-grey-lighter text-black;
+    }
+
+    &--page {
+        @apply font-bold text-black cursor-default;
+
+    }
+
+    &--leaf {
+        &::before {
+            @apply bg-grey;
+
+            display: block;
+            position: absolute;
+            content: " ";
+
+            top: 50%;
+            margin-top: -2px;
+            margin-left: -0.75rem;
+
+            width: 4px;
+            height: 4px;
+
+            transform-origin: center center;
+            transform: rotate(45deg);
+        }
+
+        &.el-navtree__link--page::before {
+            @apply bg-blue;
+        }
+    }
+    /* &--open {
+      @apply font-bold text-black;
+    } */
+  }
+}
+
+.el-breadcrumbs {
+    @apply text-grey-darker t-6;
+
+    padding: 0;
+    list-style: none;
+
+    &__item {
+        display: inline-block;
+
+        &:not(:last-child) {
+            &::after {
+                content: ">";
+                padding: 0 0.5rem;
+            }
+        }
+    }
+
+    &__link {
+        @apply text-grey-darker;
+
+        &:hover,
+        &:active {
+            @apply text-black;
+        }
+    }
+}
+
+.page {
+  &__sidebar {
+    @apply mt-xxl;
+  }
+
+  &__title {
+    @apply t-1 mt-m;
+  }
+
+  &__meta {
+    @apply t-note text-grey-darker;
+  }
+
+  &__post {
+    @apply mb-xxl;
+
+    &-thumbnail {
+      height: 200px;
+      position: relative;
+      overflow: hidden;
+
+      &-img {
+        position: absolute;
+        display: block;
+        height: 100%;
+        width: 100%;
+        object-fit: cover;
+      }
+    }
+
+    &-title {
+      @apply mt-s mb-xs t-4;
+    }
+  }
+}
+
+.layout {
+  &__header {
+    @apply flex items-center px-s;
+  }
+
+  &__menu {
+    @apply ml-xl;
+    display: flex;
+  }
+
+  &__menu-item {
+    @apply px-m py-xs font-serif uppercase t-note text-grey-darker;
+
+    &--active,
+    &:hover,
+    &:active {
+        @apply text-black; 
+    }
+
+    &:focus {
+        @apply bg-grey-lighter text-black;
+    }
+
+    &--active {
+        @apply cursor-default;
+    }
+  }
+
+  &__language-select {
+    margin-left: auto;
+  }
+
+  &__logotype {
+    display: block;
+    height: 54px;
+    margin: 1.5rem;
+  }
+}
+
+/**
+ * prism.js Coy theme for JavaScript, CoffeeScript, CSS and HTML
+ * Based on https://github.com/tshedor/workshop-wp-theme (Example: http://workshop.kansan.com/category/sessions/basics or http://workshop.timshedor.com/category/sessions/basics);
+ * @author Tim  Shedor
+ */
+
+.token.comment,
+.token.block-comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+	color: #7D8B99;
+}
+
+.token.punctuation {
+	color: #5F6364;
+}
+
+.token.property,
+.token.tag,
+.token.boolean,
+.token.number,
+.token.function-name,
+.token.constant,
+.token.symbol,
+.token.deleted {
+	color: #c92c2c;
+}
+
+.token.selector,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.function,
+.token.builtin,
+.token.inserted {
+	color: #2f9c0a;
+}
+
+.token.operator,
+.token.entity,
+.token.url,
+.token.variable {
+	color: #a67f59;
+}
+
+.token.atrule,
+.token.attr-value,
+.token.keyword,
+.token.class-name {
+	color: #1990b8;
+}
+
+.token.regex,
+.token.important {
+	color: #e90;
+}
+
+.language-css .token.string,
+.style .token.string {
+	color: #a67f59;
+}
+
+.token.important {
+	font-weight: normal;
+}
+
+.token.bold {
+	font-weight: bold;
+}
+.token.italic {
+	font-style: italic;
+}
+
+.token.entity {
+	cursor: help;
+}
+
+.token.namespace {
+	opacity: .7;
+}
+
+@tailwind utilities;

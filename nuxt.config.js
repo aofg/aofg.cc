@@ -1,5 +1,4 @@
 const axios = require("axios");
-
 const parseArgs = require("minimist");
 
 const argv = parseArgs(process.argv.slice(2), {
@@ -27,10 +26,9 @@ module.exports = {
     middleware: "i18n"
   },
   plugins: [
-    { src: "~/plugins/charts.plugin.ts", ssr: false },
     { src: "~/plugins/bem.plugin.ts" },
     { src: "~/plugins/i18n.plugin.ts" },
-    { src: "~/plugins/async-computed.plugin.ts" }
+    { src: "~/plugins/common.plugin.ts" },
   ],
   head: {
     title: "MAINCOIN EXPLORER",
@@ -87,15 +85,50 @@ module.exports = {
   /*
    ** Build configuration
    */
-  css: ["~/assets/scss/main.scss"],
+  css: [
+    'markdown-it-icons/dist/index.css',
+    "~/assets/css/main.css"
+  ],
   build: {
     babel: {
       plugins: ["dynamic-import-node"]
     }
   },
+  generate: {
+    fallback: true,
+    interval: 100,
+    routes() {
+      const owner = 'aofg'
+      const repo = 'docs'
+
+      return Promise.all(['en', 'ru'].map(language => {
+        const url = `https://api.github.com/repos/${owner}/${repo}/contents/${language}`
+        return axios.get(url).then(r => console.log(r.data))
+      }))
+      // return Promise.all(
+      //   ['guide', 'api', 'examples', 'faq']
+      //     .map((category) => {
+      //       return axios.get(`https://docs.api.nuxtjs.org/menu/${locale}/${category}`)
+      //         .then((res) => res.data || [])
+      //         .then((menu) => {
+      //           return _(menu)
+      //             .map('links')
+      //             .flatten()
+      //             .map((m) => m.to.slice(1))
+      //             .compact()
+      //             .map((slug) => {
+      //               return `/${category}/${slug}`
+      //             })
+      //             .value()
+      //             .concat(`/${category}`)
+      //         })
+      //     })
+      // )
+      //   .then((routes) => _(routes).flatten().uniq().value())
+    }
+  },
   modules: [
     "@nuxtjs/axios",
-    "nuxt-buefy",
     "@nuxtjs/dotenv",
     "~/modules/typescript.js",
     [
@@ -114,7 +147,16 @@ module.exports = {
           { key: "BACKEND_URL", default: `https://api.maincoin.money` }
         ]
       }
-    ]
+    ],
+    '@nuxtjs/markdownit'
   ],
+  markdownit: {
+    injected: true,
+    breaks: true,
+    linkify: true,
+    use: [
+      __dirname + '/plugins/md.plugin.js'
+    ]
+  },
   axios: {}
 };

@@ -1,8 +1,8 @@
-
-<template lang="pug">
-  span(:class="b()")
-    nuxt-link.button(:to='toRu' :class='ruClasses') RU
-    nuxt-link.button(:to='toEn' :class='enClasses') EN
+<template>
+  <section v-bem>
+    <nuxt-link :to="toRu">RU</nuxt-link>
+    <nuxt-link :to="toEn">EN</nuxt-link>
+  </section>
 </template>
 
 <script lang="ts">
@@ -38,7 +38,7 @@ export default class extends Vue {
   }
 
   get localeLessPath() {
-    return (this.$route.fullPath as string).slice(3);
+    return ((this as any).$route.fullPath as string).slice(3);
   }
 
   get toEn() {
