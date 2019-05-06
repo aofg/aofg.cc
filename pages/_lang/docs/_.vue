@@ -18,7 +18,8 @@
           <span>last edited on March, 25 by</span>
           <a href="#">aofg</a>
         </p>
-        <div v-bem:content.md class="md" v-html="content" ref="content"></div>
+        <el-markdown :raw='page.content'></el-markdown>
+        <!-- <div v-bem:content.md class="md" v-html="content" ref="content"></div> -->
       </div>
     </div>
   </div>
@@ -36,9 +37,9 @@ import axios from "axios";
     const path = [params.lang, ...params["0"].split("/")];
     console.log(path);
     const { data: page } = await $axios.get(
-      "http://localhost:4000/content/" + path.join("/")
+      "http://localhost:4567/content/" + path.join("/")
     );
-    const { data: menu } = await axios.get("http://localhost:4000/menu");
+    const { data: menu } = await axios.get("http://localhost:4567/menu");
     return {
       page,
       menu
@@ -57,10 +58,6 @@ export default class extends Vue {
   menu: any;
 
   path: string[];
-
-  get content() {
-    return (<any>this).$md.render(this.page.content);
-  }
 
   openPage(page: any) {
     (this as any).$router.push(`/${this.locale}/docs/${page.path}`);
@@ -110,11 +107,11 @@ export default class extends Vue {
     const node = traverse(this.menu[this.locale], dirpath);
     this.menuPage = node.pages[pageName];
 
-    console.log(
-      Array.from((this.$refs.content as Element).querySelectorAll("a")).forEach(
-        link => link.addEventListener("click", this.clickOnLink.bind(this))
-      )
-    );
+    // console.log(
+    //   Array.from((this.$refs.content as Element).querySelectorAll("a")).forEach(
+    //     link => link.addEventListener("click", this.clickOnLink.bind(this))
+    //   )
+    // );
   }
 }
 </script>

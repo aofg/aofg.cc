@@ -5,6 +5,7 @@
 // const { rendererRule, coreRuler } = require('markdown-it-regex')
 const Plugin = require("markdown-it-regexp");
 const prism = require('markdown-it-prism');
+const markdownItMermaid = require('markdown-it-mermaid').default;
 
 const faPlugin = Plugin(/\:fa-([\w\-]+)\:/, function(match, utils) {
   return '<i class="fa fa-' + utils.escape(match[1]) + '"></i>';
@@ -54,8 +55,10 @@ module.exports = function mdplugin(md) {
   };
 
   faPlugin(md)
-
   prism(md)
+  markdownItMermaid(md,{
+    "theme": "default"
+  })
   // md.renderer.rules['fa-icons'] = (tokens, idx) => {
   //   return rendererRule(tokens, idx, icons)
   // }

@@ -4,7 +4,7 @@
       rel="stylesheet"
       href="//cdn.materialdesignicons.com/2.0.46/css/materialdesignicons.min.css"
     >
-    <!-- <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Cormorant+Garamond:500|PT+Sans:400,700&amp;subset=cyrillic"> -->
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600&amp;subset=cyrillic" rel="stylesheet">
     <link rel="stylesheet" href="https://use.typekit.net/gvf5gpx.css">
 
   <!-- <div class="container mx-auto" style="display: none">

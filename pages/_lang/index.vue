@@ -19,7 +19,7 @@ import axios from "axios";
   name: "page",
   components: {},
   async asyncData() {
-    const response = await axios.get("http://localhost:4000/menu");
+    const response = await axios.get("http://localhost:4567/menu");
     return {
       raw: response.data
     };

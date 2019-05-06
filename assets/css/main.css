@@ -101,10 +101,12 @@
 
 .el-code {
     @apply t-mono bg-grey-lightest border-grey-lighter border-solid border text-black rounded pl-xs pr-xs;
+    
+    /* white-space: nowrap; */
 }
 .el-code-block {
     @apply el-code p-s mb-xl;
-
+    line-height: 1.75rem;
     overflow: auto;
     max-height: 550px;
 }
@@ -203,7 +205,12 @@ blockquote { @apply el-blockquote; }
     max-width: resolve((100 / 12) * 12)%;
 }
 
-.md {
+.el-markdown {
+    &__s {
+        .md__link {
+            @apply text-red;
+        }
+    }
     &__heading {
        @apply el-h;
 
@@ -239,7 +246,7 @@ blockquote { @apply el-blockquote; }
 
         position: relative;
         display: inline-block;
-        white-space: normal;
+        white-space: nowrap;
     }
 
     &__blockquote { @apply el-blockquote; }
@@ -381,7 +388,7 @@ blockquote { @apply el-blockquote; }
   }
 
   &__meta {
-    @apply t-note text-grey-darker;
+    @apply t-note text-grey-darker mb-xl;
   }
 
   &__post {
